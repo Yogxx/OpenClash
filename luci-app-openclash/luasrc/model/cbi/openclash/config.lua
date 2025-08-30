@@ -46,7 +46,7 @@ function default_config_set(f)
 	end
 end
 
-ful = SimpleForm("upload", translate("Config Manage"), nil)
+ful = SimpleForm("upload", nil)
 ful.reset = false
 ful.submit = false
 
