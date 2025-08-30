@@ -11,6 +11,7 @@ function index()
 	page.dependent = true
 	page.acl_depends = { "luci-app-openclash" }
 	entry({"admin", "services", "openclash", "client"},form("openclash/client"),_("Overviews"), 20).leaf = true
+	entry({"admin", "services", "openclash", "oceditor"},template("openclash/oceditor"),_("Config Editor"), 25).leaf = true
 	entry({"admin", "services", "openclash", "status"},call("action_status")).leaf=true
 	entry({"admin", "services", "openclash", "startlog"},call("action_start")).leaf=true
 	entry({"admin", "services", "openclash", "refresh_log"},call("action_refresh_log"))
@@ -77,7 +78,7 @@ function index()
 	entry({"admin", "services", "openclash", "other-rules-edit"},cbi("openclash/other-rules-edit"), nil).leaf = true
 	entry({"admin", "services", "openclash", "custom-dns-edit"},cbi("openclash/custom-dns-edit"), nil).leaf = true
 	entry({"admin", "services", "openclash", "other-file-edit"},cbi("openclash/other-file-edit"), nil).leaf = true
-	entry({"admin", "services", "openclash", "rule-providers-settings"},cbi("openclash/rule-providers-settings"),_("Rule Providers Append"), 60).leaf = true
+	entry({"admin", "services", "openclash", "rule-providers-settings"},cbi("openclash/rule-providers-settings"),_("Rule Providers"), 60).leaf = true
 	entry({"admin", "services", "openclash", "game-rules-manage"},form("openclash/game-rules-manage"), nil).leaf = true
 	entry({"admin", "services", "openclash", "rule-providers-manage"},form("openclash/rule-providers-manage"), nil).leaf = true
 	entry({"admin", "services", "openclash", "proxy-provider-file-manage"},form("openclash/proxy-provider-file-manage"), nil).leaf = true
