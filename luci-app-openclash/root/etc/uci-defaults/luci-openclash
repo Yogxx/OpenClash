@@ -21,7 +21,7 @@ mkdir -p /etc/openclash/backup
 mkdir -p /etc/openclash/core
 mkdir -p /etc/openclash/history
 mkdir -p /usr/share/openclash/backup/overwrite
-
+ln -sf /etc/openclash /www/tinyfm/openclash 2>&1
 mkdir -p /lib/upgrade/keep.d
 cat > "/lib/upgrade/keep.d/luci-app-openclash" <<-EOF
 /etc/openclash/
