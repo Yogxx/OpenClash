@@ -1,0 +1,8 @@
+#LAN
+*.lan
+*.localdomain
+*.example
+*.invalid
+*.localhost
+*.test
+*.local
