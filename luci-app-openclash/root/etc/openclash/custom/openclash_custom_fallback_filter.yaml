@@ -1,18 +1,6 @@
-# If IP addresses resolved with servers in `nameservers` are in the specified
-# subnets below, they are considered invalid and results from `fallback`
-# servers are used instead.
-#
-# IP address resolved with servers in `nameserver` is used when
-# `fallback-filter.geoip` is true and when GEOIP of the IP address is `CN`.
-#
-# If `fallback-filter.geoip` is false, results from `nameserver` nameservers
-# are always used if not match `fallback-filter.ipcidr`.
-#
-# This is a countermeasure against DNS pollution attacks.
-
 fallback-filter:
   geoip: true
-  geoip-code: CN
+  geoip-code: ID
   ipcidr:
     - ::/128
     - ::1/128
