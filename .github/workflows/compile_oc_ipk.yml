@@ -42,7 +42,7 @@ jobs:
       - name: Download OpenWrt SDK (snapshot tar.zst with fallback)
         run: |
           set -e
-          mkdir sdk && cd sdk
+          mkdir -p sdk && cd sdk
 
           if [ "${{ matrix.type }}" = "ipk" ]; then
             curl -Lf https://downloads.openwrt.org/releases/22.03.0/targets/x86/64/openwrt-sdk-22.03.0-x86-64_gcc-11.2.0_musl.Linux-x86_64.tar.xz \
@@ -52,13 +52,14 @@ jobs:
           fi
 
           MIRRORS=(
-            "https://downloads.openwrt.org/snapshots/targets/x86/64"
-            "https://mirrors.pku.edu.cn/openwrt/snapshots/targets/x86/64"
+            "https://downloads.openwrt.org/snapshots/targets/x86/64/sdk"
+            "https://mirrors.pku.edu.cn/openwrt/snapshots/targets/x86/64/sdk"
           )
 
           for BASE in "${MIRRORS[@]}"; do
             echo "Trying mirror: $BASE"
-            SDK=$(curl -s $BASE | grep -oE 'openwrt-sdk-x86-64[^"]+\.tar\.zst' | head -n1 || true)
+
+            SDK=$(curl -s $BASE/ | grep -oE 'openwrt-sdk-x86-64[^"]+\.tar\.zst' | head -n1 || true)
             [ -z "$SDK" ] && continue
 
             curl -L "$BASE/$SDK" -o sdk.tar.zst || continue
@@ -68,8 +69,6 @@ jobs:
               tar --zstd -xf sdk.tar.zst
               mv openwrt-sdk-* openwrt
               exit 0
-            else
-              echo "Invalid archive from $BASE"
             fi
           done
 
