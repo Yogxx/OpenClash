@@ -39,11 +39,12 @@ jobs:
             curl git tar zstd unzip jq \
             python3 python3-pyelftools python3-setuptools
 
-      - name: Download OpenWrt SDK (snapshot tar.zst with fallback)
+      - name: Download OpenWrt SDK (fixed snapshot)
         run: |
           set -e
           mkdir -p sdk && cd sdk
 
+          # 1) IPK: pake OpenWrt 22.03 stable SDK
           if [ "${{ matrix.type }}" = "ipk" ]; then
             curl -Lf https://downloads.openwrt.org/releases/22.03.0/targets/x86/64/openwrt-sdk-22.03.0-x86-64_gcc-11.2.0_musl.Linux-x86_64.tar.xz \
               | tar xJ
@@ -51,29 +52,21 @@ jobs:
             exit 0
           fi
 
-          MIRRORS=(
-            "https://downloads.openwrt.org/snapshots/targets/x86/64/sdk"
-            "https://mirrors.pku.edu.cn/openwrt/snapshots/targets/x86/64/sdk"
-          )
+          # 2) APK: pake snapshot SDK yang kamu sebutkan
+          SDK_URL="https://downloads.openwrt.org/snapshots/targets/x86/64/openwrt-sdk-x86-64_gcc-14.3.0_musl.Linux-x86_64.tar.zst"
+          echo "Downloading snapshot SDK from: $SDK_URL"
+          
+          curl -Lf "$SDK_URL" -o sdk.tar.zst
 
-          for BASE in "${MIRRORS[@]}"; do
-            echo "Trying mirror: $BASE"
+          echo "Validating archive"
+          file sdk.tar.zst
 
-            SDK=$(curl -s $BASE/ | grep -oE 'openwrt-sdk-x86-64[^"]+\.tar\.zst' | head -n1 || true)
-            [ -z "$SDK" ] && continue
+          echo "Extracting SDK"
+          tar --zstd -xf sdk.tar.zst
 
-            curl -L "$BASE/$SDK" -o sdk.tar.zst || continue
+          mv openwrt-sdk-* openwrt
 
-            if file sdk.tar.zst | grep -q 'Zstandard compressed data'; then
-              echo "Valid SDK from $BASE"
-              tar --zstd -xf sdk.tar.zst
-              mv openwrt-sdk-* openwrt
-              exit 0
-            fi
-          done
-
-          echo "❌ Failed to download valid snapshot SDK from all mirrors"
-          exit 1
+          echo "SDK extracted successfully"
 
       - name: Copy OpenClash source
         run: |
