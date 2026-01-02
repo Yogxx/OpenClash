@@ -39,21 +39,35 @@ jobs:
             curl git tar zstd unzip jq \
             python3 python3-pyelftools python3-setuptools
 
-      - name: Download OpenWrt SDK (FIXED)
+      - name: Download OpenWrt SDK (snapshot tar.zst SAFE)
         run: |
+          set -e
           mkdir sdk && cd sdk
+
           if [ "${{ matrix.type }}" = "ipk" ]; then
-            curl -L https://downloads.openwrt.org/releases/22.03.0/targets/x86/64/openwrt-sdk-22.03.0-x86-64_gcc-11.2.0_musl.Linux-x86_64.tar.xz \
+            curl -Lf https://downloads.openwrt.org/releases/22.03.0/targets/x86/64/openwrt-sdk-22.03.0-x86-64_gcc-11.2.0_musl.Linux-x86_64.tar.xz \
               | tar xJ
             mv openwrt-sdk-* openwrt
-          else
-            BASE=https://downloads.openwrt.org/snapshots/targets/x86/64
-            NAME=$(curl -s $BASE | grep -oE 'openwrt-sdk-x86-64[^"]+\.tar\.zst' | head -n1)
-            echo "Using snapshot SDK: $NAME"
-            curl -L "$BASE/$NAME" \
-              | tar --use-compress-program=unzstd -x
-            mv openwrt-sdk-* openwrt
+            exit 0
           fi
+
+          BASE=https://downloads.openwrt.org/snapshots/targets/x86/64
+          SDK=$(curl -s $BASE | grep -oE 'openwrt-sdk-x86-64[^"]+\.tar\.zst' | head -n1)
+
+          echo "Snapshot SDK: $SDK"
+
+          curl -Lf "$BASE/$SDK" -o sdk.tar.zst
+
+          echo "Validate archive:"
+          file sdk.tar.zst
+
+          if ! file sdk.tar.zst | grep -q 'Zstandard compressed data'; then
+            echo "❌ Downloaded file is NOT a valid zstd archive"
+            exit 1
+          fi
+
+          tar --zstd -xf sdk.tar.zst
+          mv openwrt-sdk-* openwrt
 
       - name: Copy OpenClash source
         run: |
