@@ -26,6 +26,7 @@
 
 
 * [Wiki](https://github.com/vernesong/OpenClash/wiki)
+* ![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/Yogxx/OpenWrt-nikkiku/total?style=for-the-badge&logo=github)
 
 
 下载地址
@@ -188,4 +189,5 @@ make menuconfig
 <p align="center">
     <img src="https://github.com/vernesong/OpenClash/raw/master/img/log.png">
 </p>
+
 
