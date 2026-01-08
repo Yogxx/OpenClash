@@ -7,8 +7,7 @@ local UTIL = require "luci.util"
 local fs = require "luci.openclash"
 local uci = require("luci.model.uci").cursor()
 
-m = SimpleForm("openclash",translate("OpenClash"))
-m.description = translate("A Clash Client For OpenWrt")
+m = SimpleForm("openclash")
 m.reset = false
 m.submit = false
 
