@@ -43,18 +43,8 @@ bold_off = [[</strong>]]
 local op_mode = fs.uci_get_config("config", "operation_mode")
 if not op_mode then op_mode = "redir-host" end
 local lan_ip = fs.lanip()
-m = Map("openclash", translate("Plugin Settings"))
+m = Map("openclash")
 m.pageaction = false
-m.description = translate("Note: To restore the default configuration, try accessing:").." <a href='javascript:void(0)' onclick='javascript:restore_config(this)'>http://"..lan_ip.."/cgi-bin/luci/admin/services/openclash/restore</a>"..
-"<br/>"..translate("Note: It is not recommended to enable IPv6 and related services for routing. Most of the network connection problems reported so far are related to it")..
-"<br/>"..font_green..translate("Note: Turning on secure DNS in the browser will cause abnormal shunting, please be careful to turn it off")..font_off..
-"<br/>"..font_green..translate("Note: Some software will modify the device HOSTS, which will cause abnormal shunt, please pay attention to check")..font_off..
-"<br/>"..font_green..translate("Note: Game proxy please use nodes except VMess")..font_off..
-"<br/>"..font_green..translate("Note: If you need to perform client access control in Fake-IP mode, please change the DNS hijacking mode to firewall forwarding")..font_off..
-"<br/>"..translate("Note: The default proxy routes local traffic, BT, PT download, etc., please use Redir-Host mode as much as possible and pay attention to traffic avoidance")..
-"<br/>"..translate("Note: If the connection is abnormal, please follow the steps on this page to check first")..": ".."<a href='javascript:void(0)' onclick='javascript:return winOpen(\"https://github.com/vernesong/OpenClash/wiki/%E7%BD%91%E7%BB%9C%E8%BF%9E%E6%8E%A5%E5%BC%82%E5%B8%B8%E6%97%B6%E6%8E%92%E6%9F%A5%E5%8E%9F%E5%9B%A0\")'>"..font_green..bold_on..translate("Click to the page")..bold_off..font_off.."</a>"..
-"<br/>"..font_green..translate("For More Useful Meta Core Functions Go Wiki")..": "..font_off.."<a href='javascript:void(0)' onclick='javascript:return winOpen(\"https://wiki.metacubex.one/\")'>"..translate("https://wiki.metacubex.one/").."</a>"
-
 s = m:section(TypedSection, "openclash")
 s.anonymous = true
 
@@ -178,7 +168,7 @@ function custom_domain_dns.write(self, section, value)
 		end
 	end
 end
-
+--[[
 ---- Access Control
 o = s:taboption("lan_ac", ListValue, "lan_ac_mode", translate("LAN Access Control Mode"))
 o.description = font_red..bold_on..translate("To Use in Fake-IP Mode, Please Switch The Dns Redirect Mode To Firewall Forwarding")..bold_off..font_off
@@ -379,7 +369,7 @@ for _, mac in ipairs(mac_order) do
 	mac_b:value(mac, "%s%s (%s)" %{ mac, mac_hostname_map[mac], ip_str })
 	mac_w:value(mac, "%s%s (%s)" %{ mac, mac_hostname_map[mac], ip_str })
 end
-
+]]
 ---- Traffic Control
 o = s:taboption("traffic_control", Flag, "router_self_proxy", font_red..bold_on..translate("Router-Self Proxy")..bold_off..font_off)
 o.description = translate("Only Supported for Rule Mode")..", "..font_red..bold_on..translate("ALL Functions In Stream Enhance Tag Will Not Work After Disable")..bold_off..font_off
@@ -839,7 +829,7 @@ o.rawhtml = true
 o.template = "openclash/other_stream_option"
 o.value = "OpenAI"
 o:depends("stream_auto_select_openai", "1")
-
+--[[
 ---- update Settings
 o = s:taboption("rules_update", Flag, "other_rule_auto_update", translate("Auto Update"))
 o.description = font_red..bold_on..translate("Auto Update Other Rules")..bold_off..font_off
@@ -1098,7 +1088,7 @@ o.write = function()
 	SYS.call("/usr/share/openclash/openclash_chnroute.sh >/dev/null 2>&1 &")
 	HTTP.redirect(DISP.build_url("admin", "services", "openclash"))
 end
-
+]]
 o = s:taboption("auto_restart", Flag, "auto_restart", translate("Auto Restart"))
 o.description = translate("Auto Restart OpenClash")
 o.default = 0
@@ -1167,7 +1157,7 @@ o.rawhtml = true
 o = s:taboption("dashboard", DummyValue, "Zashboard", translate("Update Zashboard Version"))
 o.template="openclash/switch_dashboard"
 o.rawhtml = true
-
+--[[
 ---- ipv6
 o = s:taboption("ipv6", Flag, "ipv6_enable", translate("Proxy IPv6 Traffic"))
 o.description = font_red..bold_on..translate("The Gateway and DNS of The Connected Device Must be The Router IP, Disable IPv6 DHCP To Avoid Abnormal Connection If You Do Not Use")..bold_off..font_off
@@ -1269,7 +1259,7 @@ function o.write(self, section, value)
 		end
 	end
 end
-
+]]
 ---- version update
 core_update = s:taboption("version_update", DummyValue, "", nil)
 core_update.template = "openclash/update"
@@ -1293,7 +1283,7 @@ function o.write(self, section, value)
 		end
 	end
 end
-
+--[[
 ---- debug
 o = s:taboption("debug", DummyValue, "", nil)
 o.template = "openclash/debug"
@@ -1345,7 +1335,7 @@ if fs.uci_get_config("config", "dler_token") then
 else
 	o.value = font_red..bold_on..translate("Account not logged in")..bold_off..font_off
 end
-
+]]
 local t = {
 	{Commit, Apply}
 }
