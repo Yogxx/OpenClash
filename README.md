@@ -40,7 +40,15 @@ for openwrt (25.10)
 * apk update (25.10)
 * apk add --allow-untrusted luci-app-openclash_*.apk
 
-Dependensi
+Screenshoot
+---
+<details><summary>Overviews</summary>
+ <p>
+  <img src="https://raw.githubusercontent.com/Yogxx/OpenClash/refs/heads/master/img/Screenshot_20260109-234647_Chrome.png" alt="overviews">
+ </p>
+</details>
+
+Packages
 ---
 
 * luci
@@ -63,6 +71,7 @@ Dependensi
 * ip6tables-mod-nat(iptables-ipv6)
 * kmod-inet-diag(PROCESS-NAME)
 * kmod-nft-tproxy(Firewall4)
+
 
 
 
