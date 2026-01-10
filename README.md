@@ -74,7 +74,8 @@ Packages
 
 Credit
 ---
-- [Original] repo(https://github.com/vernesong/OpenClash)
+- [OpenClash](https://github.com/vernesong/OpenClash)
+
 
 
 
