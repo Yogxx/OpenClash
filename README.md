@@ -22,7 +22,10 @@ Download link
 
 * Download [here](https://github.com/Yogxx/OpenClash/releases)
 
-Install
+Manual Installation
+---
+OpenWrt (24.05)
+---
 * Download from releases
 * upload to root
 * open terminal
@@ -31,7 +34,8 @@ Install
 * opkg update (24.05)
 * opkg install luci-app-openclash_*.ipk
 
-for openwrt (25.10)
+OpenWrt (25.10)
+---
 * Download from releases
 * upload to root
 * open terminal
@@ -50,7 +54,6 @@ Screenshoot
 
 Packages
 ---
-
 * luci
 * luci-base
 * dnsmasq-full
@@ -75,6 +78,7 @@ Packages
 Credit
 ---
 - [OpenClash](https://github.com/vernesong/OpenClash)
+
 
 
 
