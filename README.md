@@ -72,6 +72,9 @@ Packages
 * kmod-inet-diag(PROCESS-NAME)
 * kmod-nft-tproxy(Firewall4)
 
+Credit
+---
+- [Original] repo(https://github.com/vernesong/OpenClash)
 
 
 
