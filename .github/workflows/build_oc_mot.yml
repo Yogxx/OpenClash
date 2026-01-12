@@ -72,6 +72,37 @@ jobs:
       - name: Copy source
         run: cp -r luci-app-openclash sdk/openwrt/package/
 
+      - name: Update OpenClash resources
+        run: |
+          BASE=sdk/openwrt/package/luci-app-openclash/root
+          TMP=tmp
+          mkdir -p "$TMP"
+
+          curl -sSL https://ispip.clang.cn/all_cn.txt -o "$TMP/china.ipset"
+          curl -sSL https://ispip.clang.cn/all_cn_ipv6.txt -o "$TMP/china6.ipset"
+          mkdir -p "$BASE/etc/openclash"
+          cp "$TMP/china.ipset"  "$BASE/etc/openclash/china_ip_route.ipset"
+          cp "$TMP/china6.ipset" "$BASE/etc/openclash/china_ip6_route.ipset"
+
+          curl -sSL https://github.com/MetaCubeX/metacubexd/archive/refs/heads/gh-pages.zip -o "$TMP/metacubexd.zip"
+          unzip -q "$TMP/metacubexd.zip" -d "$TMP"
+          rm -rf "$BASE/usr/share/openclash/ui/metacubexd"
+          mkdir -p "$BASE/usr/share/openclash/ui/metacubexd"
+          cp -r "$TMP"/metacubexd-gh-pages/* "$BASE/usr/share/openclash/ui/metacubexd"
+
+          curl -sSL https://github.com/Zephyruso/zashboard/releases/latest/download/dist-cdn-fonts.zip -o "$TMP/zashboard.zip"
+          unzip -q "$TMP/zashboard.zip" -d "$TMP/zashboard"
+          rm -rf "$BASE/usr/share/openclash/ui/zashboard"
+          mkdir -p "$BASE/usr/share/openclash/ui/zashboard"
+          cp -r "$TMP/zashboard/dist/"* "$BASE/usr/share/openclash/ui/zashboard"
+
+          TAG=$(curl -s https://api.github.com/repos/Loyalsoldier/v2ray-rules-dat/releases/latest | jq -r .tag_name)
+          curl -sSL https://github.com/Loyalsoldier/v2ray-rules-dat/releases/download/$TAG/geosite.dat \
+            -o "$BASE/etc/openclash/GeoSite.dat"
+
+          curl -sSL https://github.com/alecthw/mmdb_china_ip_list/releases/latest/download/Country-lite.mmdb \
+            -o "$BASE/etc/openclash/Country.mmdb"
+
       - name: Compile po2lmo
         run: |
           cd sdk/openwrt/package/luci-app-openclash/tools/po2lmo
