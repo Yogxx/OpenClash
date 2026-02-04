@@ -48,7 +48,7 @@ Screenshoot
 ---
 <details><summary>Overviews</summary>
  <p>
-  <img src="https://raw.githubusercontent.com/Yogxx/OpenClash/refs/heads/master/img/Screenshot_20260109-234647_Chrome.png" alt="overviews">
+  <img src="https://raw.githubusercontent.com/Yogxx/OpenClash/refs/heads/master/img/ss.PNG" alt="overviews">
  </p>
 </details>
 
@@ -78,6 +78,7 @@ Packages
 Credit
 ---
 - [OpenClash](https://github.com/vernesong/OpenClash)
+
 
 
 
