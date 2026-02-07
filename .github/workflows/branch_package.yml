@@ -1,21 +1,12 @@
-name: Branch Package
+name: Sync Release to Package Branch
 
 on:
   workflow_dispatch:
     inputs:
-      upload_release:
-        description: Upload ke GitHub Release
-        required: true
-        default: "false"
-        type: choice
-        options: ["false", "true"]
-
-      upload_telegram:
-        description: Upload ke Telegram
-        required: true
-        default: "true"
-        type: choice
-        options: ["false", "true"]
+      tag:
+        description: "Tag release (contoh: v0.47.055). Kosongkan untuk latest"
+        required: false
+        default: ""
 
 env:
   PKG_NAME: luci-app-openclash
@@ -23,26 +14,8 @@ env:
   PACKAGE_DIR: master
 
 jobs:
-  get_version:
+  sync:
     runs-on: ubuntu-latest
-    outputs:
-      version: ${{ steps.ver.outputs.version }}
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: package
-
-      - id: ver
-        run: |
-          if [ -f version ]; then
-            echo "version=$(cat version)" >> $GITHUB_OUTPUT
-          else
-            echo "version=unknown" >> $GITHUB_OUTPUT
-          fi
-
-  release:
-    runs-on: ubuntu-latest
-    needs: get_version
 
     steps:
       - name: Checkout package branch
@@ -51,48 +24,51 @@ jobs:
           ref: package
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Download artifacts
-        uses: actions/download-artifact@v4
-        with:
-          path: artifacts
+      - name: Resolve release tag
+        id: tag
+        run: |
+          if [ -z "${{ inputs.tag }}" ]; then
+            TAG=$(curl -s https://api.github.com/repos/${{ github.repository }}/releases/latest | jq -r .tag_name)
+          else
+            TAG="${{ inputs.tag }}"
+          fi
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
 
-      - name: Prepare package files
+      - name: Download release assets
         run: |
           set -e
-          VERSION="${{ needs.get_version.outputs.version }}"
-          mkdir -p "${PACKAGE_DIR}"
+          TAG="${{ steps.tag.outputs.tag }}"
+          mkdir -p assets
 
-          # bersihkan versi lama
+          API="https://api.github.com/repos/${{ github.repository }}/releases/tags/$TAG"
+          curl -s "$API" \
+            | jq -r '.assets[].browser_download_url' \
+            | grep -E '\.(ipk|apk)$' \
+            | while read url; do
+                echo "Downloading $url"
+                curl -L "$url" -o "assets/$(basename "$url")"
+              done
+
+      - name: Update package branch
+        run: |
+          set -e
+          mkdir -p ${PACKAGE_DIR}
+
+          # hapus versi lama
           rm -f ${PACKAGE_DIR}/${PKG_NAME}_*.ipk
           rm -f ${PACKAGE_DIR}/${PKG_NAME}_*.apk
 
-          # copy dari artifact (INI YANG BENAR)
-          find artifacts -name "*.ipk" -exec cp {} ${PACKAGE_DIR}/${PKG_NAME}_${VERSION}_all.ipk \;
-          find artifacts -name "*.apk" -exec cp {} ${PACKAGE_DIR}/${PKG_NAME}_${VERSION}.apk \;
+          # copy versi baru
+          cp assets/*.ipk ${PACKAGE_DIR}/
+          cp assets/*.apk ${PACKAGE_DIR}/
 
-          echo "$VERSION" > ${PACKAGE_DIR}/version
+          echo "${{ steps.tag.outputs.tag }}" > ${PACKAGE_DIR}/version
 
-      - name: Commit & push to package branch
-        run: |
           git config user.name "github-actions[bot]"
-          git config user.email "github-actions@users.noreply.github.com"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
 
           git add ${PACKAGE_DIR}
-          git commit -m "update ${PKG_NAME} ${VERSION}" || echo "no changes"
-          git push origin ${PACKAGE_BRANCH}
-
-      - name: Upload to Telegram
-        if: inputs.upload_telegram == 'true'
-        env:
-          TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
-          TG_CHAT_ID: ${{ secrets.TG_CHAT_ID }}
-          VERSION: ${{ needs.get_version.outputs.version }}
-        run: |
-          for f in ${PACKAGE_DIR}/*.ipk ${PACKAGE_DIR}/*.apk; do
-            [ -f "$f" ] || continue
-            curl -s -X POST "https://api.telegram.org/bot${TG_BOT_TOKEN}/sendDocument" \
-              -F chat_id="${TG_CHAT_ID}" \
-              -F document=@"$f" \
-              -F caption="📦 OpenClash ${VERSION}\n$(basename "$f")"
-          done
+          git commit -m "sync OpenClash ${{
+            steps.tag.outputs.tag }}" || echo "No changes"
+          git push
           
