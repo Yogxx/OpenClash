@@ -1,18 +1,24 @@
-name: Build & Publish OpenClash Package
+name: Branch Package
 
 on:
   workflow_dispatch:
     inputs:
       upload_release:
-        description: "Upload to GitHub Release"
+        description: Upload ke GitHub Release
         required: true
         default: "false"
+        type: choice
+        options: ["false", "true"]
+
       upload_telegram:
-        description: "Upload to Telegram"
+        description: Upload ke Telegram
         required: true
         default: "true"
+        type: choice
+        options: ["false", "true"]
 
 env:
+  PKG_NAME: luci-app-openclash
   PACKAGE_BRANCH: package
   PACKAGE_DIR: master
 
@@ -20,43 +26,23 @@ jobs:
   get_version:
     runs-on: ubuntu-latest
     outputs:
-      version: ${{ steps.version.outputs.version }}
+      version: ${{ steps.ver.outputs.version }}
     steps:
       - uses: actions/checkout@v4
-
-      - id: version
-        run: |
-          VERSION=$(cat version | tr -d '\n')
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
-
-  build:
-    runs-on: ubuntu-latest
-    needs: get_version
-    strategy:
-      matrix:
-        type: [ipk, apk]
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Build ${{ matrix.type }}
-        run: |
-          mkdir -p output
-          if [ "${{ matrix.type }}" = "ipk" ]; then
-            cp luci-app-openclash_*.ipk output/luci-app-openclash_${{ needs.get_version.outputs.version }}_all.ipk
-          else
-            cp luci-app-openclash_*.apk output/luci-app-openclash_${{ needs.get_version.outputs.version }}.apk
-          fi
-
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
         with:
-          name: luci-app-openclash-${{ matrix.type }}
-          path: output/*
+          ref: package
+
+      - id: ver
+        run: |
+          if [ -f version ]; then
+            echo "version=$(cat version)" >> $GITHUB_OUTPUT
+          else
+            echo "version=unknown" >> $GITHUB_OUTPUT
+          fi
 
   release:
     runs-on: ubuntu-latest
-    needs: [get_version, build]
+    needs: get_version
 
     steps:
       - name: Checkout package branch
@@ -70,40 +56,43 @@ jobs:
         with:
           path: artifacts
 
-      - name: Update package files
+      - name: Prepare package files
         run: |
-          mkdir -p master
+          set -e
+          VERSION="${{ needs.get_version.outputs.version }}"
+          mkdir -p "${PACKAGE_DIR}"
 
-          # hapus versi lama
-          rm -f master/luci-app-openclash_*.ipk
-          rm -f master/luci-app-openclash_*.apk
+          # bersihkan versi lama
+          rm -f ${PACKAGE_DIR}/${PKG_NAME}_*.ipk
+          rm -f ${PACKAGE_DIR}/${PKG_NAME}_*.apk
 
-          # copy file baru
-          cp artifacts/**/* master/
+          # copy dari artifact (INI YANG BENAR)
+          find artifacts -name "*.ipk" -exec cp {} ${PACKAGE_DIR}/${PKG_NAME}_${VERSION}_all.ipk \;
+          find artifacts -name "*.apk" -exec cp {} ${PACKAGE_DIR}/${PKG_NAME}_${VERSION}.apk \;
 
-          # update version file
-          echo "${{ needs.get_version.outputs.version }}" > master/version
+          echo "$VERSION" > ${PACKAGE_DIR}/version
 
-      - name: Commit & push
+      - name: Commit & push to package branch
         run: |
-          git config user.name "github-actions"
-          git config user.email "actions@github.com"
-          git add master
-          git commit -m "update luci-app-openclash ${{ needs.get_version.outputs.version }}" || exit 0
-          git push
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions@users.noreply.github.com"
+
+          git add ${PACKAGE_DIR}
+          git commit -m "update ${PKG_NAME} ${VERSION}" || echo "no changes"
+          git push origin ${PACKAGE_BRANCH}
 
       - name: Upload to Telegram
-        if: ${{ github.event.inputs.upload_telegram == 'true' }}
+        if: inputs.upload_telegram == 'true'
+        env:
+          TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
+          TG_CHAT_ID: ${{ secrets.TG_CHAT_ID }}
+          VERSION: ${{ needs.get_version.outputs.version }}
         run: |
-          for f in master/luci-app-openclash_*; do
-            curl -F document=@"$f" \
-              "https://api.telegram.org/bot${{ secrets.TG_BOT_TOKEN }}/sendDocument?chat_id=${{ secrets.TG_CHAT_ID }}"
+          for f in ${PACKAGE_DIR}/*.ipk ${PACKAGE_DIR}/*.apk; do
+            [ -f "$f" ] || continue
+            curl -s -X POST "https://api.telegram.org/bot${TG_BOT_TOKEN}/sendDocument" \
+              -F chat_id="${TG_CHAT_ID}" \
+              -F document=@"$f" \
+              -F caption="📦 OpenClash ${VERSION}\n$(basename "$f")"
           done
-
-      - name: Create GitHub Release
-        if: ${{ github.event.inputs.upload_release == 'true' }}
-        uses: softprops/action-gh-release@v2
-        with:
-          tag_name: v${{ needs.get_version.outputs.version }}
-          files: master/luci-app-openclash_*
           
