@@ -1,19 +1,24 @@
 name: Branch Package
 
 on:
+  push:
+    branches: [ master ]
+    paths:
+      - 'luci-app-openclash/Makefile'
+
   workflow_dispatch:
     inputs:
       upload_release:
         description: 'Upload ke GitHub Release?'
         required: true
-        default: 'true'
+        default: 'false'
         type: choice
         options: [ 'false', 'true' ]
 
       upload_telegram:
-        description: 'Upload IPK/APK ke Telegram?'
+        description: 'Upload ke Telegram?'
         required: true
-        default: 'false'
+        default: 'true'
         type: choice
         options: [ 'false', 'true' ]
 
@@ -27,8 +32,7 @@ jobs:
     outputs:
       version: ${{ steps.ver.outputs.version }}
     steps:
-      - name: Checkout source
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
           ref: master
 
@@ -46,8 +50,7 @@ jobs:
         type: [ ipk, apk ]
 
     steps:
-      - name: Checkout source
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
           ref: master
 
@@ -57,7 +60,7 @@ jobs:
           sudo apt install -y curl git tar zstd unzip jq \
             python3 python3-pyelftools python3-setuptools
 
-      - name: Download SDK
+      - name: Download OpenWrt SDK
         run: |
           mkdir -p sdk && cd sdk
           if [ "${{ matrix.type }}" = "ipk" ]; then
@@ -68,7 +71,8 @@ jobs:
           mv openwrt-sdk-* openwrt
 
       - name: Copy source
-        run: cp -r luci-app-openclash sdk/openwrt/package/
+        run: |
+          cp -r luci-app-openclash sdk/openwrt/package/
 
       - name: Compile po2lmo
         run: |
@@ -81,10 +85,18 @@ jobs:
           make defconfig
           make package/${{ env.PKG_NAME }}/compile -j$(nproc)
 
+      - name: Verify build output
+        run: |
+          find sdk/openwrt/bin/packages -name "${{ env.PKG_NAME }}*" -type f
+          if ! find sdk/openwrt/bin/packages -name "${{ env.PKG_NAME }}*" -type f | grep -q .; then
+            echo "❌ build output not found"
+            exit 1
+          fi
+
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: openclash-${{ matrix.type }}
+          name: ${{ env.PKG_NAME }}-${{ matrix.type }}
           path: sdk/openwrt/bin/packages/**/${{ env.PKG_NAME }}*
 
   release:
@@ -96,17 +108,7 @@ jobs:
         with:
           path: dist
 
-      - name: Create GitHub Release
-        if: inputs.upload_release == 'true'
-        uses: softprops/action-gh-release@v2
-        with:
-          tag_name: v${{ needs.get_version.outputs.version }}
-          name: OpenClash v${{ needs.get_version.outputs.version }}
-          files: dist/**/${{ env.PKG_NAME }}*
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Push packages to package branch
+      - name: Push to package branch
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
@@ -116,13 +118,45 @@ jobs:
           git checkout package
 
           mkdir -p package/master
-          cp -f ../dist/**/${{ env.PKG_NAME }}* package/master/ || true
+
+          cp -v ../dist/**/${{ env.PKG_NAME }}_*.ipk package/master/ || true
+          cp -v ../dist/**/${{ env.PKG_NAME }}_*.apk package/master/ || true
 
           cd package/master
-          ls -t luci-app-openclash_* 2>/dev/null | tail -n +11 | xargs -r rm --
+
+          # hapus versi lama (keep 10)
+          ls -t ${{ env.PKG_NAME }}_*.ipk 2>/dev/null | tail -n +11 | xargs -r rm --
+          ls -t ${{ env.PKG_NAME }}_*.apk 2>/dev/null | tail -n +11 | xargs -r rm --
 
           cd ../..
           git add package/master
-          git commit -m "update OpenClash packages v${{ needs.get_version.outputs.version }}" || echo "No changes"
+          git commit -m "update OpenClash v${{ needs.get_version.outputs.version }}" || echo "no changes"
           git push origin package
+
+      - name: GitHub Release
+        if: github.event.inputs.upload_release == 'true'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ needs.get_version.outputs.version }}
+          name: OpenClash v${{ needs.get_version.outputs.version }}
+          files: |
+            dist/**/${{ env.PKG_NAME }}_*.ipk
+            dist/**/${{ env.PKG_NAME }}_*.apk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload to Telegram
+        if: github.event.inputs.upload_telegram == 'true'
+        env:
+          TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
+          TG_CHAT_ID: ${{ secrets.TG_CHAT_ID }}
+          VERSION: ${{ needs.get_version.outputs.version }}
+        run: |
+          shopt -s globstar nullglob
+          for file in dist/**/${{ env.PKG_NAME }}_*.ipk dist/**/${{ env.PKG_NAME }}_*.apk; do
+            curl -s -X POST "https://api.telegram.org/bot${TG_BOT_TOKEN}/sendDocument" \
+              -F chat_id="${TG_CHAT_ID}" \
+              -F document=@"$file" \
+              -F caption="🚀 OpenClash v${VERSION} | 📦 $(basename "$file")"
+          done
           
