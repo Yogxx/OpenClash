@@ -50,12 +50,12 @@ fi
 if [ "$TIME" != "$CHTIME" ]; then
 	if [ "$github_address_mod" != "0" ]; then
       if [ "$github_address_mod" == "https://cdn.jsdelivr.net/" ] || [ "$github_address_mod" == "https://fastly.jsdelivr.net/" ] || [ "$github_address_mod" == "https://testingcf.jsdelivr.net/" ]; then
-         DOWNLOAD_URL="${github_address_mod}gh/vernesong/OpenClash@package/${RELEASE_BRANCH}/version"
+         DOWNLOAD_URL="${github_address_mod}gh/Yogxx/OpenClash@package/${RELEASE_BRANCH}/version"
       else
-         DOWNLOAD_URL="${github_address_mod}https://raw.githubusercontent.com/vernesong/OpenClash/package/${RELEASE_BRANCH}/version"
+         DOWNLOAD_URL="${github_address_mod}https://raw.githubusercontent.com/Yogxx/OpenClash/package/${RELEASE_BRANCH}/version"
       fi
    else
-      DOWNLOAD_URL="https://raw.githubusercontent.com/vernesong/OpenClash/package/${RELEASE_BRANCH}/version"
+      DOWNLOAD_URL="https://raw.githubusercontent.com/Yogxx/OpenClash/package/${RELEASE_BRANCH}/version"
    fi
 
    DOWNLOAD_FILE_CURL "$DOWNLOAD_URL" "$DOWNLOAD_FILE"
