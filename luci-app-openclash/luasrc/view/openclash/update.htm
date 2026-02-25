@@ -6,11 +6,18 @@
   max-width: 300px;
 }
 .openclash-update fieldset.cbi-section {
-  border: 1px solid #ccc;
   border-radius: 8px;
   margin: 10px 0;
   padding: 10px;
-  background: #fff;
+}
+.openclash-update fieldset.cbi-section {
+  background: var(--background-color-primary);
+  border: 1px solid var(--border-color-medium);
+  color: var(--text-color-high);
+}
+
+.openclash-update table {
+  color: inherit;
 }
 .openclash-update table {
   width: 100%;
@@ -476,10 +483,10 @@
 						var oplv = status.oplv.substring(status.oplv.indexOf("v") + 1);
 						if ( oplv != "" && oplv != "loading..." ) {
 							if (status.pkg_type == "apk") {
-								url2='https://raw.githubusercontent.com/Yogxx/OpenClash/package/'+r+'/luci-app-openclash-'+oplv+'.apk';
+								url2='https://raw.githubusercontent.com/vernesong/OpenClash/package/'+r+'/luci-app-openclash-'+oplv+'.apk';
 							}
 							else {
-								url2='https://raw.githubusercontent.com/Yogxx/OpenClash/package/'+r+'/luci-app-openclash_'+oplv+'_all.ipk';
+								url2='https://raw.githubusercontent.com/vernesong/OpenClash/package/'+r+'/luci-app-openclash_'+oplv+'_all.ipk';
 							}
 							window.location.href=url2;
 						}
