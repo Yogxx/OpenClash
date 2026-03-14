@@ -61,20 +61,41 @@ jobs:
             python3 python3-pyelftools python3-setuptools
 
       - name: Download SDK
+        env:
+          MATRIX_TYPE: ${{ matrix.type }}
         run: |
           mkdir -p sdk && cd sdk
-          if [ "${{ matrix.type }}" = "ipk" ]; then
-            # FIX: URL stabil untuk IPK (release resmi)
+          if [ "$MATRIX_TYPE" = "ipk" ]; then
+            # URL stabil untuk IPK (release resmi 22.03)
             curl -Lf https://downloads.openwrt.org/releases/22.03.0/targets/x86/64/openwrt-sdk-22.03.0-x86-64_gcc-11.2.0_musl.Linux-x86_64.tar.xz | tar xJ
           else
-            # FIX: Resolve URL snapshot secara dinamis agar tidak patah saat GCC update
+            # Resolve URL snapshot dari sha256sums — lebih reliable dari parsing HTML
             BASE_URL="https://downloads.openwrt.org/snapshots/targets/x86/64"
-            SDK_FILE=$(curl -s "$BASE_URL/" | grep -oP 'openwrt-sdk[^"]+\.tar\.zst' | head -1)
+            SDK_FILE=$(curl -s "$BASE_URL/sha256sums" \
+              | grep -oP 'openwrt-sdk[^\s]+\.tar\.zst' | head -1)
+
+            if [ -z "$SDK_FILE" ]; then
+              echo "❌ Gagal parse sha256sums, fallback ke HTML"
+              SDK_FILE=$(curl -s "$BASE_URL/" \
+                | grep -oP 'openwrt-sdk[^"<>\s]+\.tar\.zst' | head -1)
+            fi
+
+            if [ -z "$SDK_FILE" ]; then
+              echo "❌ Tidak dapat menemukan SDK snapshot APK"
+              exit 1
+            fi
+
+            echo "📦 Downloading SDK: $SDK_FILE"
             curl -Lf "$BASE_URL/$SDK_FILE" | tar --zstd -xf -
           fi
-          # FIX: Hindari ambiguity jika ada lebih dari satu direktori cocok
+
           SDK_DIR=$(find . -maxdepth 1 -type d -name 'openwrt-sdk-*' | head -1)
+          if [ -z "$SDK_DIR" ]; then
+            echo "❌ Direktori SDK tidak ditemukan setelah ekstraksi"
+            exit 1
+          fi
           mv "$SDK_DIR" openwrt
+          echo "✅ SDK siap di: sdk/openwrt"
 
       - name: Copy source
         run: cp -r luci-app-openclash sdk/openwrt/package/
@@ -116,16 +137,22 @@ jobs:
           make && sudo make install
 
       - name: Compile package
+        env:
+          PKG: ${{ env.PKG_NAME }}
         run: |
           cd sdk/openwrt
           make defconfig
-          make package/${{ env.PKG_NAME }}/compile -j$(nproc)
+          make package/$PKG/compile -j$(nproc) V=s 2>&1 | tail -20
+
+      - name: Check compiled output
+        run: |
+          echo "=== Hasil compile di bin/packages ==="
+          find sdk/openwrt/bin/packages/ -type f | sort || echo "Tidak ada file"
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: openclash-${{ matrix.type }}
-          # FIX: Spesifikasikan ekstensi agar tidak memungut file yang tidak diinginkan
           path: |
             sdk/openwrt/bin/packages/**/${{ env.PKG_NAME }}*.ipk
             sdk/openwrt/bin/packages/**/${{ env.PKG_NAME }}*.apk
@@ -157,15 +184,15 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
 
       - name: Upload IPK/APK to Telegram
-        # FIX: Ganti inputs.upload_telegram → github.event.inputs.upload_telegram
         if: success() && github.event_name == 'workflow_dispatch' && github.event.inputs.upload_telegram == 'true'
         env:
           TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
           TG_CHAT_ID: ${{ secrets.TG_CHAT_ID }}
           VERSION: ${{ needs.get_version.outputs.version }}
+          PKG: ${{ env.PKG_NAME }}
         run: |
           shopt -s globstar
-          for file in dist/**/${{ env.PKG_NAME }}_*.ipk dist/**/${{ env.PKG_NAME }}-*.apk; do
+          for file in dist/**/${PKG}_*.ipk dist/**/${PKG}-*.apk; do
             [ -f "$file" ] || continue
             FILENAME=$(basename "$file")
             curl -s -X POST "https://api.telegram.org/bot${TG_BOT_TOKEN}/sendDocument" \
