@@ -81,26 +81,30 @@ jobs:
           echo "✅ Total $TOTAL file diunduh"
 
       - name: Update package branch
+        env:
+          # Ekspos output sebagai env var agar aman dipakai di dalam shell
+          TAG: ${{ steps.tag.outputs.tag }}
         run: |
           set -e
           mkdir -p "${PACKAGE_DIR}"
 
           # Hapus versi lama
           rm -f "${PACKAGE_DIR}/${PKG_NAME}"_*.ipk
-          rm -f "${PACKAGE_DIR}/${PKG_NAME}"_*.apk
+          rm -f "${PACKAGE_DIR}/${PKG_NAME}"-*.apk
 
-          # FIX: Gunakan find+cp agar tidak gagal jika salah satu ekstensi tidak ada
+          # Gunakan find+cp agar tidak gagal jika salah satu ekstensi tidak ada
           find assets -name "*.ipk" -exec cp {} "${PACKAGE_DIR}/" \;
           find assets -name "*.apk" -exec cp {} "${PACKAGE_DIR}/" \;
 
-          # Simpan versi aktif
-          echo "${{ steps.tag.outputs.tag }}" > "${PACKAGE_DIR}/version"
+          # Simpan versi aktif — pakai $TAG bukan ${{ }} di dalam shell
+          echo "$TAG" > "${PACKAGE_DIR}/version"
 
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
           git add "${PACKAGE_DIR}"
 
-          # FIX: Pindahkan ekspresi ${{ }} ke satu baris agar tidak parse error
-          git commit -m "sync: OpenClash ${{ steps.tag.outputs.tag }}" || echo "ℹ️  Tidak ada perubahan, skip commit"
+          # Pakai $TAG sebagai variabel bash, bukan ekspresi ${{ }} di dalam run
+          git commit -m "sync: OpenClash ${TAG}" || echo "ℹ️  Tidak ada perubahan, skip commit"
           git push
+          
