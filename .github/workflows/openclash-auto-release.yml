@@ -2,7 +2,7 @@ name: OpenClash Auto Release
 
 on:
   push:
-    branches: [ dev ]
+    branches: [ master ]
     paths:
       - 'luci-app-openclash/Makefile'
 
