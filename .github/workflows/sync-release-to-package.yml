@@ -1,6 +1,7 @@
 name: Sync Release to Package Branch
 
 on:
+  # Auto-run saat Workflow 1 membuat release baru via PAT_TOKEN
   release:
     types: [published]
 
@@ -32,7 +33,6 @@ jobs:
 
       - name: Resolve release tag
         id: tag
-        # Semua nilai dari konteks GitHub diekspos via env, tidak pakai ${{ }} di dalam shell
         env:
           EVENT_NAME: ${{ github.event_name }}
           RELEASE_TAG: ${{ github.event.release.tag_name }}
@@ -44,6 +44,7 @@ jobs:
           elif [ -n "$INPUT_TAG" ]; then
             TAG="$INPUT_TAG"
           else
+            # Fallback workflow_dispatch tanpa input: ambil release terbaru
             TAG=$(curl -s "https://api.github.com/repos/$REPO/releases/latest" \
               | jq -r .tag_name)
           fi
