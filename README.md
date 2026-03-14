@@ -51,6 +51,11 @@ Screenshoot
   <img src="https://raw.githubusercontent.com/Yogxx/OpenClash/refs/heads/master/img/ss.png" alt="overviews">
  </p>
 </details>
+<details><summary>Version</summary>
+ <p>
+  <img src="https://raw.githubusercontent.com/Yogxx/OpenClash/refs/heads/master/img/ss1.png" alt="overviews">
+ </p>
+</details>
 
 Packages
 ---
