@@ -1,32 +1,59 @@
 <h1 align="center">
   <img src="https://raw.githubusercontent.com/vernesong/OpenClash/dev/img/logo.png" alt="Clash" width="200">
   <br>OpenClash<br>
-</h1>
-  
-<p align="center">
-本插件是一个可运行在 OpenWrt 上的<a href="https://github.com/MetaCubeX/mihomo" target="_blank"> Mihomo(Clash) </a>客户端
-</p>
-<p align="center">
-兼容 Shadowsocks、ShadowsocksR、Vmess、Trojan、Snell 等协议，根据灵活的规则配置实现策略代理
-</p>
 
-使用手册
+</h1>
+
+  <p align="center">
+	<a target="_blank" href="https://github.com/Yogxx/OpenClash/releases"><img src="https://img.shields.io/github/downloads/Yogxx/OpenClash/total?label=Total%20Download&labelColor=blue&style=for-the-badge">
+	</a>
+  </p>
+
+User Manual
 ---
 
 
 * [Wiki](https://github.com/vernesong/OpenClash/wiki)
 
 
-下载地址
+Download link
 ---
 
 
-* IPK & APK [前往下载](https://github.com/vernesong/OpenClash/releases)
+* Download [here](https://github.com/Yogxx/OpenClash/releases)
 
-
-依赖
+Manual Installation
 ---
+OpenWrt (24.05)
+---
+* Download from releases
+* upload to root
+* open terminal
+* cd
+* ls
+* opkg update (24.05)
+* opkg install luci-app-openclash_*.ipk
 
+OpenWrt (25.10)
+---
+* Download from releases
+* upload to root
+* open terminal
+* cd
+* ls
+* apk update (25.10)
+* apk add --allow-untrusted luci-app-openclash_*.apk
+
+Screenshoot
+---
+<details><summary>Overviews</summary>
+ <p>
+  <img src="https://raw.githubusercontent.com/Yogxx/OpenClash/refs/heads/master/img/ss.PNG" alt="overviews">
+ </p>
+</details>
+
+Packages
+---
 * luci
 * luci-base
 * dnsmasq-full
@@ -48,79 +75,12 @@
 * kmod-inet-diag(PROCESS-NAME)
 * kmod-nft-tproxy(Firewall4)
 
-
-编译
+Credit
 ---
+- [OpenClash](https://github.com/vernesong/OpenClash)
 
 
-从 OpenWrt 的 [SDK](https://archive.openwrt.org/chaos_calmer/15.05.1/ar71xx/generic/OpenWrt-SDK-15.05.1-ar71xx-generic_gcc-4.8-linaro_uClibc-0.9.33.2.Linux-x86_64.tar.bz2) 编译
-```bash
-# 解压下载好的 SDK
-curl -SLk --connect-timeout 30 --retry 2 "https://archive.openwrt.org/chaos_calmer/15.05.1/ar71xx/generic/OpenWrt-SDK-15.05.1-ar71xx-generic_gcc-4.8-linaro_uClibc-0.9.33.2.Linux-x86_64.tar.bz2" -o "/tmp/SDK.tar.bz2"
-cd \tmp
-tar xjf SDK.tar.bz2
-cd OpenWrt-SDK-15.05.1-*
-
-# Clone 项目
-mkdir package/luci-app-openclash
-cd package/luci-app-openclash
-git init
-git remote add -f origin https://github.com/vernesong/OpenClash.git
-git config core.sparsecheckout true
-echo "luci-app-openclash" >> .git/info/sparse-checkout
-git pull --depth 1 origin master
-git branch --set-upstream-to=origin/master master
-
-# 编译 po2lmo (如果有po2lmo可跳过)
-pushd luci-app-openclash/tools/po2lmo
-make && sudo make install
-popd
-
-# 开始编译
-
-# 先回退到SDK主目录
-cd ../..
-make package/luci-app-openclash/luci-app-openclash/compile V=99
-
-# IPK文件位置
-./bin/ar71xx/packages/base/luci-app-openclash_*-beta_all.ipk
-```
-
-```bash
-# 同步源码
-cd package/luci-app-openclash/luci-app-openclash
-git pull
-
-# 您也可以直接拷贝 `luci-app-openclash` 文件夹至其他 `OpenWrt` 项目的 `Package` 目录下随固件编译
-
-make menuconfig
-# 选择要编译的包 LuCI -> Applications -> luci-app-openclash
-
-```
 
 
-许可
----
 
 
-* [MIT License](https://github.com/vernesong/OpenClash/blob/master/LICENSE)
-* 内核 [Mihomo](https://github.com/MetaCubeX/mihomo) by [MetaCubeX](https://github.com/MetaCubeX)
-* 本项目代码基于 [Luci For Clash](https://github.com/frainzy1477/luci-app-clash) by [frainzy1477](https://github.com/frainzy1477)
-* GEOIP数据库 [GeoLite2](https://dev.maxmind.com/geoip/geoip2/geolite2/) by [MaxMind](https://www.maxmind.com)
-* IP检查 [IP](https://ip.skk.moe/) by [SukkaW](https://ip.skk.moe/)
-* 控制面板 [zashboard](https://github.com/Zephyruso/zashboard) by [Dreamacro](https://github.com/Zephyruso)
-* 控制面板 [yacd](https://github.com/haishanh/yacd) by [haishanh](https://github.com/haishanh)
-* 流媒体解锁检测 [RegionRestrictionCheck](https://github.com/lmc999/RegionRestrictionCheck) by [lmc999](https://github.com/lmc999)
-
-请作者喝杯咖啡
----
-
-* PayPal
-<p align="left">
-    <a href="https://ko-fi.com/vernesong"><img width="300" src="https://www.ko-fi.com/img/githubbutton_sm.svg"> </a>
-</p>
-
-* USDT-TRC20
-<p align="left">
-    <img width="300" src="https://github.com/vernesong/OpenClash/raw/master/img/USDT-Wallet.png">
-</p>
