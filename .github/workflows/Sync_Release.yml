@@ -1,0 +1,78 @@
+name: Sync Release to Package Branch
+
+on:
+  release:
+    types: [published]
+
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Tag release (kosong = pakai release terbaru)"
+        required: false
+        default: ""
+
+env:
+  PKG_NAME: luci-app-openclash
+  PACKAGE_BRANCH: package
+  PACKAGE_DIR: master
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout package branch
+        uses: actions/checkout@v4
+        with:
+          ref: package
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Resolve release tag
+        id: tag
+        run: |
+          if [ "${{ github.event_name }}" = "release" ]; then
+            TAG="${{ github.event.release.tag_name }}"
+          elif [ -n "${{ inputs.tag }}" ]; then
+            TAG="${{ inputs.tag }}"
+          else
+            TAG=$(curl -s https://api.github.com/repos/${{ github.repository }}/releases/latest | jq -r .tag_name)
+          fi
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
+          echo "Using tag: $TAG"
+
+      - name: Download release assets
+        run: |
+          set -e
+          TAG="${{ steps.tag.outputs.tag }}"
+          mkdir -p assets
+
+          curl -s https://api.github.com/repos/${{ github.repository }}/releases/tags/$TAG \
+            | jq -r '.assets[].browser_download_url' \
+            | grep -E '\.(ipk|apk)$' \
+            | while read url; do
+                echo "Downloading $url"
+                curl -L "$url" -o "assets/$(basename "$url")"
+              done
+
+      - name: Update package branch
+        run: |
+          set -e
+          mkdir -p ${PACKAGE_DIR}
+
+          # hapus versi lama
+          rm -f ${PACKAGE_DIR}/${PKG_NAME}_*.ipk
+          rm -f ${PACKAGE_DIR}/${PKG_NAME}_*.apk
+
+          # copy versi baru
+          cp assets/*.ipk ${PACKAGE_DIR}/
+          cp assets/*.apk ${PACKAGE_DIR}/
+
+          echo "${{ steps.tag.outputs.tag }}" > ${PACKAGE_DIR}/version
+
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          git add ${PACKAGE_DIR}
+          git commit -m "sync OpenClash ${{
+            steps.tag.outputs.tag }}" || echo "No changes"
+          git push
