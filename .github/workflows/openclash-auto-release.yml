@@ -154,7 +154,7 @@ jobs:
             dist/**/${{ env.PKG_NAME }}_*.ipk
             dist/**/${{ env.PKG_NAME }}-*.apk
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
 
       - name: Upload IPK/APK to Telegram
         # FIX: Ganti inputs.upload_telegram → github.event.inputs.upload_telegram
