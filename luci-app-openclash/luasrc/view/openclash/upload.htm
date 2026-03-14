@@ -1,16 +1,57 @@
 <%+cbi/valueheader%>
-<div style="text-align: center; margin:0 auto; display:block; white-space: nowrap;">
-	<label class="cbi-value" style="display:inline-block; width: 100%;" for="ulfiles"><%:Upload File Type%>&nbsp;<%:(Click to select)%>&nbsp;&nbsp;&nbsp;
-	<select name="file_type" style="width:auto">&nbsp;&nbsp;&nbsp;
+<style>
+.oc-upload-wrap {
+	text-align: center;
+	margin: 0 auto;
+	display: block;
+	max-width: 600px;
+	padding: 0 8px;
+	box-sizing: border-box;
+}
+.oc-upload-wrap select,
+.oc-upload-wrap .cbi-input-file {
+	width: 100%;
+	max-width: 100%;
+	box-sizing: border-box;
+}
+.oc-upload-wrap hr {
+	margin: 8px 0;
+}
+.oc-upload-wrap .oc-upload-buttons {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	gap: 8px;
+	margin-top: 4px;
+}
+.oc-upload-wrap .oc-upload-buttons input[type="submit"] {
+	flex: 1 1 auto;
+	min-width: 120px;
+	max-width: 200px;
+	box-sizing: border-box;
+}
+@media (max-width: 480px) {
+	.oc-upload-wrap .oc-upload-buttons input[type="submit"] {
+		max-width: 100%;
+		width: 100%;
+	}
+}
+</style>
+
+<div class="oc-upload-wrap">
+	<label class="cbi-value" style="display:inline-block; width: 100%;" for="ulfiles"><%:Upload File Type%>&nbsp;<%:(Click to select)%><br><hr>
+	<select name="file_type">
 		<option value="config" selected="selected"><%:Config File%> (.yaml)</option>
 		<option value="proxy-provider"><%:Proxy Provider File%></option>
 		<option value="rule-provider"><%:Rule Provider File%></option>
 		<option value="clash_meta">[Meta] <%:Core File%> (.tar.gz)</option>
 		<option value="backup-file"><%:Backup File%> (.tar.gz)</option>
-	</select>
-  <input class="cbi-input-file" style="width: 30%" type="file" id="ulfile" name="ulfile" />
-	<input type="submit" class="btn cbi-button cbi-input-reload" name="upload" value="<%:Upload%>" />
-	<input type="submit" class="btn cbi-button cbi-button-reset" value="<%:Backup%>" onclick="return backup_all_file(this)"/>
+	</select><br><hr>
+	<input class="cbi-input-file" type="file" id="ulfile" name="ulfile" /><br><hr>
+	<div class="oc-upload-buttons">
+		<input type="submit" class="btn cbi-button cbi-input-reload" name="upload" value="<%:Upload%>" />
+		<input type="submit" class="btn cbi-button cbi-button-reset" value="<%:Backup%>" onclick="return backup_all_file(this)"/>
+	</div>
 </div>
 <%+cbi/valuefooter%>
 
