@@ -88,27 +88,27 @@ if [ -n "$OP_CV" ] && [ -n "$OP_LV" ] && version_compare "$OP_CV" "$OP_LV" && [ 
    if [ "$github_address_mod" != "0" ]; then
       if [ "$github_address_mod" == "https://cdn.jsdelivr.net/" ] || [ "$github_address_mod" == "https://fastly.jsdelivr.net/" ] || [ "$github_address_mod" == "https://testingcf.jsdelivr.net/" ]; then
          if [ -x "/bin/opkg" ]; then
-            DOWNLOAD_URL="${github_address_mod}gh/vernesong/OpenClash@package/${RELEASE_BRANCH}/luci-app-openclash_${LAST_VER}_all.ipk"
+            DOWNLOAD_URL="${github_address_mod}gh/Yogxx/OpenClash@package/${RELEASE_BRANCH}/luci-app-openclash_${LAST_VER}_all.ipk"
             DOWNLOAD_PATH="/tmp/openclash.ipk"
          elif [ -x "/usr/bin/apk" ]; then
-            DOWNLOAD_URL="${github_address_mod}gh/vernesong/OpenClash@package/${RELEASE_BRANCH}/luci-app-openclash-${LAST_VER}.apk"
+            DOWNLOAD_URL="${github_address_mod}gh/Yogxx/OpenClash@package/${RELEASE_BRANCH}/luci-app-openclash-${LAST_VER}.apk"
             DOWNLOAD_PATH="/tmp/openclash.apk"
          fi
       else
          if [ -x "/bin/opkg" ]; then
-            DOWNLOAD_URL="${github_address_mod}https://raw.githubusercontent.com/vernesong/OpenClash/package/${RELEASE_BRANCH}/luci-app-openclash_${LAST_VER}_all.ipk"
+            DOWNLOAD_URL="${github_address_mod}https://raw.githubusercontent.com/Yogxx/OpenClash/package/${RELEASE_BRANCH}/luci-app-openclash_${LAST_VER}_all.ipk"
             DOWNLOAD_PATH="/tmp/openclash.ipk"
          elif [ -x "/usr/bin/apk" ]; then
-            DOWNLOAD_URL="${github_address_mod}https://raw.githubusercontent.com/vernesong/OpenClash/package/${RELEASE_BRANCH}/luci-app-openclash-${LAST_VER}.apk"
+            DOWNLOAD_URL="${github_address_mod}https://raw.githubusercontent.com/Yogxx/OpenClash/package/${RELEASE_BRANCH}/luci-app-openclash-${LAST_VER}.apk"
             DOWNLOAD_PATH="/tmp/openclash.apk"
          fi
       fi
    else
       if [ -x "/bin/opkg" ]; then
-         DOWNLOAD_URL="https://raw.githubusercontent.com/vernesong/OpenClash/package/${RELEASE_BRANCH}/luci-app-openclash_${LAST_VER}_all.ipk"
+         DOWNLOAD_URL="https://raw.githubusercontent.com/Yogxx/OpenClash/package/${RELEASE_BRANCH}/luci-app-openclash_${LAST_VER}_all.ipk"
          DOWNLOAD_PATH="/tmp/openclash.ipk"
       elif [ -x "/usr/bin/apk" ]; then
-         DOWNLOAD_URL="https://raw.githubusercontent.com/vernesong/OpenClash/package/${RELEASE_BRANCH}/luci-app-openclash-${LAST_VER}.apk"
+         DOWNLOAD_URL="https://raw.githubusercontent.com/Yogxx/OpenClash/package/${RELEASE_BRANCH}/luci-app-openclash-${LAST_VER}.apk"
          DOWNLOAD_PATH="/tmp/openclash.apk"
       fi
    fi
