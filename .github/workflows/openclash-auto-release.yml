@@ -165,7 +165,7 @@ jobs:
           VERSION: ${{ needs.get_version.outputs.version }}
         run: |
           shopt -s globstar
-          for file in dist/**/${{ env.PKG_NAME }}_*.ipk dist/**/${{ env.PKG_NAME }}-*.apk; do
+          for file in dist/**/${{ env.PKG_NAME }}_*.ipk dist/**/${{ env.PKG_NAME }}_*.apk; do
             [ -f "$file" ] || continue
             FILENAME=$(basename "$file")
             curl -s -X POST "https://api.telegram.org/bot${TG_BOT_TOKEN}/sendDocument" \
