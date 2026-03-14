@@ -48,7 +48,7 @@ Screenshoot
 ---
 <details><summary>Overviews</summary>
  <p>
-  <img src="https://raw.githubusercontent.com/Yogxx/OpenClash/refs/heads/master/img/ss.PNG" alt="overviews">
+  <img src="https://raw.githubusercontent.com/Yogxx/OpenClash/refs/heads/master/img/ss.png" alt="overviews">
  </p>
 </details>
 
