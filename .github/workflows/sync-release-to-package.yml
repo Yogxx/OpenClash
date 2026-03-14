@@ -1,0 +1,106 @@
+name: Sync Release to Package Branch
+
+on:
+  release:
+    types: [published]
+
+  # Bisa juga dijalankan manual dengan tag tertentu atau pakai release terbaru
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Tag release (kosong = pakai release terbaru)"
+        required: false
+        default: ""
+
+# FIX: Tambahkan permission agar GITHUB_TOKEN bisa push ke branch
+permissions:
+  contents: write
+
+env:
+  PKG_NAME: luci-app-openclash
+  PACKAGE_BRANCH: package
+  PACKAGE_DIR: master
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout package branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ env.PACKAGE_BRANCH }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Resolve release tag
+        id: tag
+        run: |
+          if [ "${{ github.event_name }}" = "release" ]; then
+            # Auto-run dari event release published
+            TAG="${{ github.event.release.tag_name }}"
+          # FIX: Ganti inputs.tag → github.event.inputs.tag
+          elif [ -n "${{ github.event.inputs.tag }}" ]; then
+            TAG="${{ github.event.inputs.tag }}"
+          else
+            # Fallback: ambil release terbaru via API
+            TAG=$(curl -s https://api.github.com/repos/${{ github.repository }}/releases/latest \
+              | jq -r .tag_name)
+          fi
+
+          if [ -z "$TAG" ] || [ "$TAG" = "null" ]; then
+            echo "❌ Gagal mendapatkan tag release"
+            exit 1
+          fi
+
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+          echo "✅ Using tag: $TAG"
+
+      - name: Download release assets
+        run: |
+          set -e
+          TAG="${{ steps.tag.outputs.tag }}"
+          mkdir -p assets
+
+          echo "📦 Fetching assets for tag: $TAG"
+
+          curl -s https://api.github.com/repos/${{ github.repository }}/releases/tags/$TAG \
+            | jq -r '.assets[].browser_download_url' \
+            | grep -E '\.(ipk|apk)$' \
+            | while read -r url; do
+                FILENAME=$(basename "$url")
+                echo "⬇️  Downloading $FILENAME"
+                curl -fsSL "$url" -o "assets/$FILENAME"
+              done
+
+          # FIX: Validasi — pastikan ada file yang berhasil diunduh
+          TOTAL=$(find assets -name "*.ipk" -o -name "*.apk" | wc -l)
+          if [ "$TOTAL" -eq 0 ]; then
+            echo "❌ Tidak ada asset IPK/APK ditemukan untuk tag $TAG"
+            exit 1
+          fi
+          echo "✅ Total $TOTAL file diunduh"
+
+      - name: Update package branch
+        run: |
+          set -e
+          mkdir -p "${PACKAGE_DIR}"
+
+          # Hapus versi lama
+          rm -f "${PACKAGE_DIR}/${PKG_NAME}"_*.ipk
+          rm -f "${PACKAGE_DIR}/${PKG_NAME}"_*.apk
+
+          # FIX: Gunakan find+cp agar tidak gagal jika salah satu ekstensi tidak ada
+          find assets -name "*.ipk" -exec cp {} "${PACKAGE_DIR}/" \;
+          find assets -name "*.apk" -exec cp {} "${PACKAGE_DIR}/" \;
+
+          # Simpan versi aktif
+          echo "${{ steps.tag.outputs.tag }}" > "${PACKAGE_DIR}/version"
+
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          git add "${PACKAGE_DIR}"
+
+          # FIX: Pindahkan ekspresi ${{ }} ke satu baris agar tidak parse error
+          git commit -m "sync: OpenClash ${{ steps.tag.outputs.tag }}" || echo "ℹ️  Tidak ada perubahan, skip commit"
+          git push
