@@ -91,7 +91,7 @@ jobs:
 
           # Hapus versi lama
           rm -f "${PACKAGE_DIR}/${PKG_NAME}"_*.ipk
-          rm -f "${PACKAGE_DIR}/${PKG_NAME}"-*.apk
+          rm -f "${PACKAGE_DIR}/${PKG_NAME}"_*.apk
 
           # Copy versi baru — find+cp agar tidak gagal jika salah satu ekstensi tidak ada
           find assets -name "*.ipk" -exec cp {} "${PACKAGE_DIR}/" \;
