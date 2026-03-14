@@ -94,21 +94,29 @@ jobs:
           set -e
           mkdir -p "${PACKAGE_DIR}"
 
-          # Hapus versi lama
+          echo "🗑️  Hapus file lama"
           rm -f "${PACKAGE_DIR}/${PKG_NAME}"_*.ipk
           rm -f "${PACKAGE_DIR}/${PKG_NAME}"-*.apk
 
-          # Copy versi baru — find+cp agar tidak gagal jika salah satu ekstensi tidak ada
-          find assets -name "*.ipk" -exec cp {} "${PACKAGE_DIR}/" \;
-          find assets -name "*.apk" -exec cp {} "${PACKAGE_DIR}/" \;
+          echo "📋 Copy file baru ke ${PACKAGE_DIR}/"
+          find assets -name "*.ipk" -exec cp -v {} "${PACKAGE_DIR}/" \;
+          find assets -name "*.apk" -exec cp -v {} "${PACKAGE_DIR}/" \;
 
-          # Simpan versi aktif
+          echo "📝 Simpan versi aktif: $TAG"
           echo "$TAG" > "${PACKAGE_DIR}/version"
+
+          echo "=== Isi ${PACKAGE_DIR} sekarang ==="
+          ls -lh "${PACKAGE_DIR}/"
 
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-          git add "${PACKAGE_DIR}"
-          git commit -m "sync: OpenClash ${TAG}" || echo "ℹ️  Tidak ada perubahan, skip commit"
+          # Gunakan git add -A agar file baru, modifikasi, dan hapus semua ter-track
+          git add -A "${PACKAGE_DIR}"
+
+          echo "=== Git status ==="
+          git status
+
+          git commit --allow-empty -m "sync: OpenClash ${TAG}"
           git push
           
