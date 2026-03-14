@@ -11,7 +11,7 @@ font_off = [[</b>]]
 bold_on = [[<strong>]]
 bold_off = [[</strong>]]
 
-m = Map(openclash, translate("Add Custom DNS Servers"))
+m = Map(openclash)
 m.pageaction = false
 m.redirect = luci.dispatcher.build_url("admin/services/openclash/config-overwrite")
 if m.uci:get(openclash, sid) ~= "dns_servers" then
@@ -19,12 +19,10 @@ if m.uci:get(openclash, sid) ~= "dns_servers" then
 	return
 end
 
--- [[ Edit Custom DNS ]] --
 s = m:section(NamedSection, sid, "dns_servers")
 s.anonymous = true
 s.addremove = false
 
----- group
 o = s:option(ListValue, "group", translate("DNS Server Group"))
 o.description = font_red..bold_on..translate("NameServer Group Must Be Set")..bold_off..font_off
 o:value("nameserver", translate("NameServer "))
@@ -33,20 +31,17 @@ o:value("default", translate("Default-NameServer"))
 o.default = "nameserver"
 o.rempty = false
 
----- IP address
 o = s:option(Value, "ip", translate("DNS Server Address"))
 o.description = translate("Do Not Add Type Ahead")
 o.placeholder = translate("Not Null")
 o.datatype = "or(host, string)"
 o.rmempty = true
 
----- port
 o = s:option(Value, "port", translate("DNS Server Port"))
 o.description = translate("Require When Use Non-Standard Port")
 o.datatype = "port"
 o.rempty = true
 
----- type
 o = s:option(ListValue, "type", translate("DNS Server Type"))
 o.description = translate("Communication protocol")
 o:value("udp", translate("UDP"))

@@ -9,18 +9,15 @@ local uci = require "luci.model.uci".cursor()
 local json = require "luci.jsonc"
 local datatype = require "luci.cbi.datatypes"
 
--- 优化 CBI UI（新版 LuCI 专用）
 local function optimize_cbi_ui()
 	luci.http.write([[
 		<script type="text/javascript">
-			// 修正上移、下移按钮名称
 			document.querySelectorAll("input.btn.cbi-button.cbi-button-up").forEach(function(btn) {
 				btn.value = "]] .. translate("Move up") .. [[";
 			});
 			document.querySelectorAll("input.btn.cbi-button.cbi-button-down").forEach(function(btn) {
 				btn.value = "]] .. translate("Move down") .. [[";
 			});
-			// 删除控件和说明之间的多余换行
 			document.querySelectorAll("div.cbi-value-description").forEach(function(descDiv) {
 				var prev = descDiv.previousSibling;
 				while (prev && prev.nodeType === Node.TEXT_NODE && prev.textContent.trim() === "") {
@@ -43,11 +40,8 @@ bold_off = [[</strong>]]
 local op_mode = string.sub(luci.sys.exec('uci get openclash.config.operation_mode 2>/dev/null'),0,-2)
 if not op_mode then op_mode = "redir-host" end
 local lan_ip = fs.lanip()
-m = Map("openclash", translate("Overwrite Settings"))
+m = Map("openclash")
 m.pageaction = false
-m.description = translate("Note: To restore the default configuration, try accessing:").." <a href='javascript:void(0)' onclick='javascript:restore_config(this)'>http://"..lan_ip.."/cgi-bin/luci/admin/services/openclash/restore</a>"..
-"<br/>"..font_green..translate("For More Useful Meta Core Functions Go Wiki")..": "..font_off.."<a href='javascript:void(0)' onclick='javascript:return winOpen(\"https://wiki.metacubex.one/\")'>"..translate("https://wiki.metacubex.one/").."</a>"
-
 s = m:section(TypedSection, "openclash")
 s.anonymous = true
 
@@ -551,8 +545,8 @@ o.rempty = false
 o = ds:option(Flag, "disable_ipv6", translate("Disable-IPv6"))
 o.rmempty = false
 o.default = o.disbled
-
--- [[ Edit Authentication ]] --
+--[[
+-- Edit Authentication --
 s = m:section(TypedSection, "authentication", translate("Set Authentication of SOCKS5/HTTP(S)"))
 s.anonymous = true
 s.addremove = true
@@ -583,7 +577,7 @@ o.rempty = true
 o = s:option(Value, "password", translate("Password"))
 o.placeholder = translate("Not Null")
 o.rmempty = true
-
+]]
 local t = {
 	{Commit, Apply}
 }

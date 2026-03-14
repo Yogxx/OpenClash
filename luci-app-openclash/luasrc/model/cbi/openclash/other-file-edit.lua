@@ -12,7 +12,7 @@ if not fs.isfile(file_path) and file_path ~= "" then
 	file_path = luci.http.urldecode(file_path)
 end
 
-m = Map("openclash", translate("File Edit"))
+m = Map("openclash")
 m.pageaction = false
 m.redirect = luci.dispatcher.build_url("admin/services/openclash/"..arg[1])
 s = m:section(TypedSection, "openclash")

@@ -9,18 +9,15 @@ local UTIL = require "luci.util"
 local fs = require "luci.openclash"
 local uci = require "luci.model.uci".cursor()
 
--- 优化 CBI UI（新版 LuCI 专用）
 local function optimize_cbi_ui()
 	luci.http.write([[
 		<script type="text/javascript">
-			// 修正上移、下移按钮名称
 			document.querySelectorAll("input.btn.cbi-button.cbi-button-up").forEach(function(btn) {
 				btn.value = "]] .. translate("Move up") .. [[";
 			});
 			document.querySelectorAll("input.btn.cbi-button.cbi-button-down").forEach(function(btn) {
 				btn.value = "]] .. translate("Move down") .. [[";
 			});
-			// 删除控件和说明之间的多余换行
 			document.querySelectorAll("div.cbi-value-description").forEach(function(descDiv) {
 				var prev = descDiv.previousSibling;
 				while (prev && prev.nodeType === Node.TEXT_NODE && prev.textContent.trim() === "") {
@@ -39,7 +36,7 @@ font_off = [[</b>]]
 bold_on = [[<strong>]]
 bold_off = [[</strong>]]
 
-m = Map("openclash", translate("Config Subscribe"))
+m = Map("openclash")
 m.pageaction = false
 
 s = m:section(TypedSection, "openclash")

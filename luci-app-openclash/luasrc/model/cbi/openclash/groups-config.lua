@@ -220,7 +220,6 @@ local function sync_group_name(section, old_name, new_name)
 		return value == pattern
 	end
 
-	-- servers 的 groups 列表
 	uci:foreach(openclash, "servers", function(s)
 		local groups = uci:get(openclash, s[".name"], "groups")
 		if groups then
@@ -241,7 +240,6 @@ local function sync_group_name(section, old_name, new_name)
 		end
 	end)
 
-	-- proxy-provider 的 groups 列表
 	uci:foreach(openclash, "proxy-provider", function(s)
 		local groups = uci:get(openclash, s[".name"], "groups")
 		if groups then
@@ -262,7 +260,6 @@ local function sync_group_name(section, old_name, new_name)
 		end
 	end)
 
-	-- groups 的 other_group 列表
 	uci:foreach(openclash, "groups", function(s)
 		if s[".name"] ~= section then
 			local other_group = uci:get(openclash, s[".name"], "other_group")
@@ -285,7 +282,6 @@ local function sync_group_name(section, old_name, new_name)
 		end
 	end)
 
-	-- dns_servers 的 specific_group 选项
 	uci:foreach(openclash, "dns_servers", function(s)
 		local specific_group = uci:get(openclash, s[".name"], "specific_group")
 		if matches(old_name, specific_group) then
@@ -293,7 +289,6 @@ local function sync_group_name(section, old_name, new_name)
 		end
 	end)
 
-	-- servers 的 dialer_proxy 选项
 	uci:foreach(openclash, "servers", function(s)
 		local dialer_proxy = uci:get(openclash, s[".name"], "dialer_proxy")
 		if matches(old_name, dialer_proxy) then
