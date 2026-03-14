@@ -1,9 +1,11 @@
 name: Sync Release to Package Branch
 
 on:
-  # Auto-run saat Workflow 1 membuat release baru via PAT_TOKEN
-  release:
-    types: [published]
+  # Auto-run langsung setelah Workflow 1 selesai sukses
+  # Lebih reliable untuk repo fork dibanding release: published
+  workflow_run:
+    workflows: ["OpenClash Auto Release"]
+    types: [completed]
 
   workflow_dispatch:
     inputs:
@@ -23,6 +25,10 @@ env:
 jobs:
   sync:
     runs-on: ubuntu-latest
+    # Jika dari workflow_run, hanya lanjut kalau upstream sukses
+    if: >
+      github.event_name == 'workflow_dispatch' ||
+      github.event.workflow_run.conclusion == 'success'
 
     steps:
       - name: Checkout package branch
@@ -35,16 +41,14 @@ jobs:
         id: tag
         env:
           EVENT_NAME: ${{ github.event_name }}
-          RELEASE_TAG: ${{ github.event.release.tag_name }}
           INPUT_TAG: ${{ github.event.inputs.tag }}
           REPO: ${{ github.repository }}
         run: |
-          if [ "$EVENT_NAME" = "release" ]; then
-            TAG="$RELEASE_TAG"
-          elif [ -n "$INPUT_TAG" ]; then
+          if [ -n "$INPUT_TAG" ]; then
             TAG="$INPUT_TAG"
           else
-            # Fallback workflow_dispatch tanpa input: ambil release terbaru
+            # Untuk workflow_run atau workflow_dispatch tanpa input:
+            # ambil release terbaru via API
             TAG=$(curl -s "https://api.github.com/repos/$REPO/releases/latest" \
               | jq -r .tag_name)
           fi
