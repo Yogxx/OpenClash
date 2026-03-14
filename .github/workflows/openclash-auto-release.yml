@@ -152,7 +152,7 @@ jobs:
           name: OpenClash v${{ needs.get_version.outputs.version }}
           files: |
             dist/**/${{ env.PKG_NAME }}_*.ipk
-            dist/**/${{ env.PKG_NAME }}_*.apk
+            dist/**/${{ env.PKG_NAME }}-*.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
