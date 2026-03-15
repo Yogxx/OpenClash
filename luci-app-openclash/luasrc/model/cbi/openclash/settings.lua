@@ -871,7 +871,7 @@ o.rawhtml = true
 o.template = "openclash/other_stream_option"
 o.value = "OpenAI"
 o:depends("stream_auto_select_openai", "1")
---[[
+
 ---- update Settings
 o = s:taboption("geo_update", Flag, "geo_auto_update", font_red..bold_on..translate("Auto Update GeoIP MMDB")..bold_off..font_off)
 o.default = 0
@@ -1045,7 +1045,7 @@ o.write = function()
 	SYS.call("/usr/share/openclash/openclash_geoasn.sh >/dev/null 2>&1 &")
 	HTTP.redirect(DISP.build_url("admin", "services", "openclash"))
 end
-
+--[[
 o = s:taboption("chnr_update", Flag, "chnr_auto_update", translate("Auto Update"))
 o.description = translate("Auto Update Chnroute Lists")
 o.default = 0
