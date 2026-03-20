@@ -1,204 +1,115 @@
 <?php
-//Default Configuration
-$CONFIG = '{"lang":"en","error_reporting":false,"show_hidden":true,"hide_Cols":false,"theme":"dark"}';
+$CONFIG = '{"lang":"en","error_reporting":false,"show_hidden":true,"hide_Cols":false,"theme":"light"}';
 
-/**
- * H3K | Tiny File Manager V2.5.3
- * @author CCP Programmers
- * @email ccpprogrammers@gmail.com
- * @github https://github.com/prasathmani/tinyfilemanager
- * @link https://tinyfilemanager.github.io
- */
-
-//TFM version
 define('VERSION', '2.5.3');
 
-//Application Title
 define('APP_TITLE', 'Tiny File Manager');
 
-// --- EDIT BELOW CONFIGURATION CAREFULLY ---
-
-// Auth with login/password
-// set true/false to enable/disable it
-// Is independent from IP white- and blacklisting
 $use_auth = false;
 
-// Login user name and password
-// Users: array('Username' => 'Password', 'Username2' => 'Password2', ...)
-// Generate secure password hash - https://tinyfilemanager.github.io/docs/pwd.html
 $auth_users = array(
-    'admin' => '$2y$10$/K.hjNr84lLNDt8fTXjoI.DBp6PpeyoJ.mGwrrLuCZfAwfSAGqhOW', //admin@123
-    'user' => '$2y$10$Fg6Dz8oH9fPoZ2jJan5tZuv6Z4Kp7avtQ9bDfrdRntXtPeiMAZyGO' //12345
+    'admin' => '$2y$10$/K.hjNr84lLNDt8fTXjoI.DBp6PpeyoJ.mGwrrLuCZfAwfSAGqhOW',
+    'user' => '$2y$10$Fg6Dz8oH9fPoZ2jJan5tZuv6Z4Kp7avtQ9bDfrdRntXtPeiMAZyGO'
 );
 
-// Readonly users
-// e.g. array('users', 'guest', ...)
 $readonly_users = array(
     'user'
 );
 
-// Global readonly, including when auth is not being used
 $global_readonly = false;
 
-// user specific directories
-// array('Username' => 'Directory path', 'Username2' => 'Directory path', ...)
 $directories_users = array();
 
-// Enable highlight.js (https://highlightjs.org/) on view's page
 $use_highlightjs = true;
 
-// highlight.js style
-// for dark theme use 'ir-black'
 $highlightjs_style = 'vs';
 
-// Enable ace.js (https://ace.c9.io/) on view's page
 $edit_files = true;
 
-// Default timezone for date() and time()
-// Doc - http://php.net/manual/en/timezones.php
-$default_timezone = 'Etc/UTC'; // UTC
+$default_timezone = 'Etc/UTC';
 
-// Root path for file manager
-// use absolute path of directory i.e: '/var/www/folder' or $_SERVER['DOCUMENT_ROOT'].'/folder'
-$root_path = $_SERVER['DOCUMENT_ROOT'].'/tinyfm/openclash';
-
-// Root url for links in file manager.Relative to $http_host. Variants: '', 'path/to/subfolder'
-// Will not working if $root_path will be outside of server document root
+$root_path = '/www/tinyfm/openclash';
 $root_url = '/tinyfm/rootfs';
+$http_host = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : '192.168.1.1';
 
-// Server hostname. Can set manually if wrong
-// $_SERVER['HTTP_HOST'].'/folder'
-$http_host = $_SERVER['HTTP_HOST'];
-
-// input encoding for iconv
 $iconv_input_encoding = 'UTF-8';
 
-// date() format for file modification date
-// Doc - https://www.php.net/manual/en/function.date.php
 $datetime_format = 'm/d/Y g:i A';
 
-// Path display mode when viewing file information
-// 'full' => show full path
-// 'relative' => show path relative to root_path
-// 'host' => show path on the host
 $path_display_mode = 'full';
 
-// Allowed file extensions for create and rename files
-// e.g. 'txt,html,css,js'
 $allowed_file_extensions = '';
 
-// Allowed file extensions for upload files
-// e.g. 'gif,png,jpg,html,txt'
 $allowed_upload_extensions = '';
 
-// Favicon path. This can be either a full url to an .PNG image, or a path based on the document root.
-// full path, e.g http://example.com/favicon.png
-// local path, e.g images/icons/favicon.png
 $favicon_path = '/tinyfm/icon/favicon.ico';
 
-// Files and folders to excluded from listing
-// e.g. array('myfile.html', 'personal-folder', '*.php', ...)
 $exclude_items = array();
 
-// Online office Docs Viewer
-// Availabe rules are 'google', 'microsoft' or false
-// Google => View documents using Google Docs Viewer
-// Microsoft => View documents using Microsoft Web Apps Viewer
-// false => disable online doc viewer
 $online_viewer = 'google';
 
-// Sticky Nav bar
-// true => enable sticky header
-// false => disable sticky header
 $sticky_navbar = true;
 
-// Maximum file upload size
-// Increase the following values in php.ini to work properly
-// memory_limit, upload_max_filesize, post_max_size
-$max_upload_size_bytes = 5000000000; // size 5,000,000,000 bytes (~5GB)
+$max_upload_size_bytes = 5000000000;
 
-// chunk size used for upload
-// eg. decrease to 1MB if nginx reports problem 413 entity too large
-$upload_chunk_size_bytes = 2000000; // chunk size 2,000,000 bytes (~2MB)
+$upload_chunk_size_bytes = 2000000;
 
-// Possible rules are 'OFF', 'AND' or 'OR'
-// OFF => Don't check connection IP, defaults to OFF
-// AND => Connection must be on the whitelist, and not on the blacklist
-// OR => Connection must be on the whitelist, or not on the blacklist
 $ip_ruleset = 'OFF';
 
-// Should users be notified of their block?
 $ip_silent = true;
 
-// IP-addresses, both ipv4 and ipv6
 $ip_whitelist = array(
-    '127.0.0.1',    // local ipv4
-    '::1'           // local ipv6
+    '127.0.0.1',
+    '::1'
 );
 
-// IP-addresses, both ipv4 and ipv6
 $ip_blacklist = array(
-    '0.0.0.0',      // non-routable meta ipv4
-    '::'            // non-routable meta ipv6
+    '0.0.0.0',
+    '::'
 );
 
-// if User has the external config file, try to use it to override the default config above [config.php]
-// sample config - https://tinyfilemanager.github.io/config-sample.txt
 $config_file = __DIR__.'/config.php';
 if (is_readable($config_file)) {
     @include($config_file);
 }
 
-// External CDN resources that can be used in the HTML (replace for GDPR compliance)
 $external = array(
-    'css-bootstrap' => '<link href="css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">',
+    'css-bootstrap' => '<link href="css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">',
     'css-dropzone' => '<link href="css/dropzone.min.css" rel="stylesheet">',
     'css-font-awesome' => '<link rel="stylesheet" href="css/font-awesome.min.css" crossorigin="anonymous">',
     'css-highlightjs' => '<link rel="stylesheet" href="css/' . $highlightjs_style . '.min.css">',
     'js-ace' => '<script src="ace/ace.js"></script>',
-    'js-bootstrap' => '<script src="jquery/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>',
+    'js-bootstrap' => '<script src="jquery/bootstrap.bundle.min.js" crossorigin="anonymous"></script>',
     'js-dropzone' => '<script src="jquery/dropzone.min.js"></script>',
-    'js-jquery' => '<script src="jquery/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>',
+    'js-jquery' => '<script src="jquery/jquery-3.6.1.min.js" crossorigin="anonymous"></script>',
     'js-jquery-datatables' => '<script src="jquery/jquery.dataTables.min.js" crossorigin="anonymous" defer></script>',
     'js-highlightjs' => '<script src="jquery/highlight.min.js"></script>',
     'pre-jsdelivr' => '<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin/><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"/>',
     'pre-cloudflare' => '<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin/><link rel="dns-prefetch" href="https://cdnjs.cloudflare.com"/>'
 );
 
-// --- EDIT BELOW CAREFULLY OR DO NOT EDIT AT ALL ---
-
-// max upload file size
 define('MAX_UPLOAD_SIZE', $max_upload_size_bytes);
 
-// upload chunk size
 define('UPLOAD_CHUNK_SIZE', $upload_chunk_size_bytes);
 
-// private key and session name to store to the session
 if ( !defined( 'FM_SESSION_ID')) {
     define('FM_SESSION_ID', 'filemanager');
 }
 
-// Configuration
 $cfg = new FM_Config();
 
-// Default language
 $lang = isset($cfg->data['lang']) ? $cfg->data['lang'] : 'en';
 
-// Show or hide files and folders that starts with a dot
 $show_hidden_files = isset($cfg->data['show_hidden']) ? $cfg->data['show_hidden'] : true;
 
-// PHP error reporting - false = Turns off Errors, true = Turns on Errors
 $report_errors = isset($cfg->data['error_reporting']) ? $cfg->data['error_reporting'] : true;
 
-// Hide Permissions and Owner cols in file-listing
 $hide_Cols = isset($cfg->data['hide_Cols']) ? $cfg->data['hide_Cols'] : true;
 
-// Theme
 $theme = isset($cfg->data['theme']) ? $cfg->data['theme'] : 'light';
 
 define('FM_THEME', $theme);
 
-//available languages
 $lang_list = array(
     'en' => 'English'
 );
@@ -211,7 +122,6 @@ if ($report_errors == true) {
     @ini_set('display_errors', 0);
 }
 
-// if fm included
 if (defined('FM_EMBED')) {
     $use_auth = false;
     $sticky_navbar = false;
@@ -228,10 +138,9 @@ if (defined('FM_EMBED')) {
         mb_regex_encoding('UTF-8');
     }
 
-    session_cache_limiter('nocache'); // Prevent logout issue after page was cached
+    session_cache_limiter('nocache');
     session_name(FM_SESSION_ID );
     function session_error_handling_function($code, $msg, $file, $line) {
-        // Permission denied for default session, try to create a new one
         if ($code == 2) {
             session_abort();
             session_id(session_create_id());
@@ -243,7 +152,6 @@ if (defined('FM_EMBED')) {
     restore_error_handler();
 }
 
-//Generating CSRF Token
 if (empty($_SESSION['token'])) {
     if (function_exists('random_bytes')) {
         $_SESSION['token'] = bin2hex(random_bytes(32));
@@ -259,26 +167,21 @@ if (empty($auth_users)) {
 $is_https = isset($_SERVER['HTTPS']) && ($_SERVER['HTTPS'] == 'on' || $_SERVER['HTTPS'] == 1)
     || isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https';
 
-// update $root_url based on user specific directories
 if (isset($_SESSION[FM_SESSION_ID]['logged']) && !empty($directories_users[$_SESSION[FM_SESSION_ID]['logged']])) {
     $wd = fm_clean_path(dirname($_SERVER['PHP_SELF']));
     $root_url =  $root_url.$wd.DIRECTORY_SEPARATOR.$directories_users[$_SESSION[FM_SESSION_ID]['logged']];
 }
-// clean $root_url
 $root_url = fm_clean_path($root_url);
 
-// abs path for site
 defined('FM_ROOT_URL') || define('FM_ROOT_URL', ($is_https ? 'https' : 'http') . '://' . $http_host . (!empty($root_url) ? '/' . $root_url : ''));
 defined('FM_SELF_URL') || define('FM_SELF_URL', ($is_https ? 'https' : 'http') . '://' . $http_host . $_SERVER['PHP_SELF']);
 
-// logout
 if (isset($_GET['logout'])) {
     unset($_SESSION[FM_SESSION_ID]['logged']);
     unset( $_SESSION['token']); 
     fm_redirect(FM_SELF_URL);
 }
 
-// Validate connection IP
 if ($ip_ruleset != 'OFF') {
     function getClientIP() {
         if (array_key_exists('HTTP_CF_CONNECTING_IP', $_SERVER)) {
@@ -321,12 +224,9 @@ if ($ip_ruleset != 'OFF') {
     }
 }
 
-// Checking if the user is logged in or not. If not, it will show the login form.
 if ($use_auth) {
     if (isset($_SESSION[FM_SESSION_ID]['logged'], $auth_users[$_SESSION[FM_SESSION_ID]['logged']])) {
-        // Logged
     } elseif (isset($_POST['fm_usr'], $_POST['fm_pwd'], $_POST['token'])) {
-        // Logging In
         sleep(1);
         if(function_exists('password_verify')) {
             if (isset($auth_users[$_POST['fm_usr']]) && isset($_POST['fm_pwd']) && password_verify($_POST['fm_pwd'], $auth_users[$_POST['fm_usr']]) && verifyToken($_POST['token'])) {
@@ -342,7 +242,6 @@ if ($use_auth) {
             fm_set_msg(lng('password_hash not supported, Upgrade PHP version'), 'error');;
         }
     } else {
-        // Form
         unset($_SESSION[FM_SESSION_ID]['logged']);
         fm_show_header_login();
         ?>
@@ -399,12 +298,10 @@ if ($use_auth) {
     }
 }
 
-// update root path
 if ($use_auth && isset($_SESSION[FM_SESSION_ID]['logged'])) {
     $root_path = isset($directories_users[$_SESSION[FM_SESSION_ID]['logged']]) ? $directories_users[$_SESSION[FM_SESSION_ID]['logged']] : $root_path;
 }
 
-// clean and check $root_path
 $root_path = rtrim($root_path, '\\/');
 $root_path = str_replace('\\', '/', $root_path);
 if (!@is_dir($root_path)) {
@@ -422,22 +319,17 @@ defined('FM_DOC_VIEWER') || define('FM_DOC_VIEWER', $online_viewer);
 define('FM_READONLY', $global_readonly || ($use_auth && !empty($readonly_users) && isset($_SESSION[FM_SESSION_ID]['logged']) && in_array($_SESSION[FM_SESSION_ID]['logged'], $readonly_users)));
 define('FM_IS_WIN', DIRECTORY_SEPARATOR == '\\');
 
-// always use ?p=
 if (!isset($_GET['p']) && empty($_FILES)) {
     fm_redirect(FM_SELF_URL . '?p=');
 }
 
-// get path
 $p = isset($_GET['p']) ? $_GET['p'] : (isset($_POST['p']) ? $_POST['p'] : '');
 
-// clean path
 $p = fm_clean_path($p);
 
-// for ajax request - save
 $input = file_get_contents('php://input');
 $_POST = (strpos($input, 'ajax') != FALSE && strpos($input, 'save') != FALSE) ? json_decode($input, true) : $_POST;
 
-// instead globals vars
 define('FM_PATH', $p);
 define('FM_USE_AUTH', $use_auth);
 define('FM_EDIT_FILE', $edit_files);
@@ -448,16 +340,12 @@ defined('FM_DATETIME_FORMAT') || define('FM_DATETIME_FORMAT', $datetime_format);
 
 unset($p, $use_auth, $iconv_input_encoding, $use_highlightjs, $highlightjs_style);
 
-/*************************** ACTIONS ***************************/
-
-// Handle all AJAX Request
 if ((isset($_SESSION[FM_SESSION_ID]['logged'], $auth_users[$_SESSION[FM_SESSION_ID]['logged']]) || !FM_USE_AUTH) && isset($_POST['ajax'], $_POST['token']) && !FM_READONLY) {
     if(!verifyToken($_POST['token'])) {
         header('HTTP/1.0 401 Unauthorized');
         die("Invalid Token.");
     }
 
-    //search : get list of files from the current folder
     if(isset($_POST['type']) && $_POST['type']=="search") {
         $dir = $_POST['path'] == "." ? '': $_POST['path'];
         $response = scan(fm_clean_path($dir), $_POST['content']);
@@ -465,14 +353,11 @@ if ((isset($_SESSION[FM_SESSION_ID]['logged'], $auth_users[$_SESSION[FM_SESSION_
         exit();
     }
 
-    // save editor file
     if (isset($_POST['type']) && $_POST['type'] == "save") {
-        // get current path
         $path = FM_ROOT_PATH;
         if (FM_PATH != '') {
             $path .= '/' . FM_PATH;
         }
-        // check path
         if (!is_dir($path)) {
             fm_redirect(FM_SELF_URL . '?p=');
         }
@@ -497,7 +382,6 @@ if ((isset($_SESSION[FM_SESSION_ID]['logged'], $auth_users[$_SESSION[FM_SESSION_
         die(true);
     }
 
-    // backup files
     if (isset($_POST['type']) && $_POST['type'] == "backup" && !empty($_POST['file'])) {
         $fileName = fm_clean_path($_POST['file']);
         $fullPath = FM_ROOT_PATH . '/';
@@ -522,7 +406,6 @@ if ((isset($_SESSION[FM_SESSION_ID]['logged'], $auth_users[$_SESSION[FM_SESSION_
         }
     }
 
-    // Save Config
     if (isset($_POST['type']) && $_POST['type'] == "settings") {
         global $cfg, $lang, $report_errors, $show_hidden_files, $lang_list, $hide_Cols, $theme;
         $newLng = $_POST['js-language'];
@@ -564,13 +447,11 @@ if ((isset($_SESSION[FM_SESSION_ID]['logged'], $auth_users[$_SESSION[FM_SESSION_
         echo true;
     }
 
-    // new password hash
     if (isset($_POST['type']) && $_POST['type'] == "pwdhash") {
         $res = isset($_POST['inputPassword2']) && !empty($_POST['inputPassword2']) ? password_hash($_POST['inputPassword2'], PASSWORD_DEFAULT) : '';
         echo $res;
     }
 
-    //upload using url
     if(isset($_POST['type']) && $_POST['type'] == "upload" && !empty($_REQUEST["uploadurl"])) {
         $path = FM_ROOT_PATH;
         if (FM_PATH != '') {
@@ -589,7 +470,6 @@ if ((isset($_SESSION[FM_SESSION_ID]['logged'], $auth_users[$_SESSION[FM_SESSION_
 
         $url = !empty($_REQUEST["uploadurl"]) && preg_match("|^http(s)?://.+$|", stripslashes($_REQUEST["uploadurl"])) ? stripslashes($_REQUEST["uploadurl"]) : null;
 
-        //prevent 127.* domain and known ports
         $domain = parse_url($url, PHP_URL_HOST);
         $port = parse_url($url, PHP_URL_PORT);
         $knownPorts = [22, 23, 25, 3306];
@@ -659,7 +539,6 @@ if ((isset($_SESSION[FM_SESSION_ID]['logged'], $auth_users[$_SESSION[FM_SESSION_
     exit();
 }
 
-// Delete file / folder
 if (isset($_GET['del'], $_POST['token']) && !FM_READONLY) {
     $del = str_replace( '/', '', fm_clean_path( $_GET['del'] ) );
     if ($del != '' && $del != '..' && $del != '.' && verifyToken($_POST['token'])) {
@@ -681,7 +560,6 @@ if (isset($_GET['del'], $_POST['token']) && !FM_READONLY) {
     $FM_PATH=FM_PATH; fm_redirect(FM_SELF_URL . '?p=' . urlencode($FM_PATH));
 }
 
-// Create a new file/folder
 if (isset($_POST['newfilename'], $_POST['newfile'], $_POST['token']) && !FM_READONLY) {
     $type = urldecode($_POST['newfile']);
     $new = str_replace( '/', '', fm_clean_path( strip_tags( $_POST['newfilename'] ) ) );
@@ -716,31 +594,24 @@ if (isset($_POST['newfilename'], $_POST['newfile'], $_POST['token']) && !FM_READ
     $FM_PATH=FM_PATH; fm_redirect(FM_SELF_URL . '?p=' . urlencode($FM_PATH));
 }
 
-// Copy folder / file
 if (isset($_GET['copy'], $_GET['finish']) && !FM_READONLY) {
-    // from
     $copy = urldecode($_GET['copy']);
     $copy = fm_clean_path($copy);
-    // empty path
     if ($copy == '') {
         fm_set_msg(lng('Source path not defined'), 'error');
         $FM_PATH=FM_PATH; fm_redirect(FM_SELF_URL . '?p=' . urlencode($FM_PATH));
     }
-    // abs path from
     $from = FM_ROOT_PATH . '/' . $copy;
-    // abs path to
     $dest = FM_ROOT_PATH;
     if (FM_PATH != '') {
         $dest .= '/' . FM_PATH;
     }
     $dest .= '/' . basename($from);
-    // move?
     $move = isset($_GET['move']);
     $move = fm_clean_path(urldecode($move));
-    // copy/move/duplicate
     if ($from != $dest) {
         $msg_from = trim(FM_PATH . '/' . basename($from), '/');
-        if ($move) { // Move and to != from so just perform move
+        if ($move) {
             $rename = fm_rename($from, $dest);
             if ($rename) {
                 fm_set_msg(sprintf(lng('Moved from').' <b>%s</b> '.lng('to').' <b>%s</b>', fm_enc($copy), fm_enc($msg_from)));
@@ -749,7 +620,7 @@ if (isset($_GET['copy'], $_GET['finish']) && !FM_READONLY) {
             } else {
                 fm_set_msg(sprintf(lng('Error while moving from').' <b>%s</b> '.lng('to').' <b>%s</b>', fm_enc($copy), fm_enc($msg_from)), 'error');
             }
-        } else { // Not move and to != from so copy with original name
+        } else {
             if (fm_rcopy($from, $dest)) {
                 fm_set_msg(sprintf(lng('Copied from').' <b>%s</b> '.lng('to').' <b>%s</b>', fm_enc($copy), fm_enc($msg_from)));
             } else {
@@ -757,18 +628,16 @@ if (isset($_GET['copy'], $_GET['finish']) && !FM_READONLY) {
             }
         }
     } else {
-       if (!$move){ //Not move and to = from so duplicate
+       if (!$move){
             $msg_from = trim(FM_PATH . '/' . basename($from), '/');
             $fn_parts = pathinfo($from);
             $extension_suffix = '';
             if(!is_dir($from)){
                $extension_suffix = '.'.$fn_parts['extension'];
             }
-            //Create new name for duplicate
             $fn_duplicate = $fn_parts['dirname'].'/'.$fn_parts['filename'].'-'.date('YmdHis').$extension_suffix;
             $loop_count = 0;
             $max_loop = 1000;
-            // Check if a file with the duplicate name already exists, if so, make new name (edge case...)
             while(file_exists($fn_duplicate) & $loop_count < $max_loop){
                $fn_parts = pathinfo($fn_duplicate);
                $fn_duplicate = $fn_parts['dirname'].'/'.$fn_parts['filename'].'-copy'.$extension_suffix;
@@ -787,19 +656,16 @@ if (isset($_GET['copy'], $_GET['finish']) && !FM_READONLY) {
     $FM_PATH=FM_PATH; fm_redirect(FM_SELF_URL . '?p=' . urlencode($FM_PATH));
 }
 
-// Mass copy files/ folders
 if (isset($_POST['file'], $_POST['copy_to'], $_POST['finish'], $_POST['token']) && !FM_READONLY) {
 
     if(!verifyToken($_POST['token'])) {
         fm_set_msg(lng('Invalid Token.'), 'error');
     }
     
-    // from
     $path = FM_ROOT_PATH;
     if (FM_PATH != '') {
         $path .= '/' . FM_PATH;
     }
-    // to
     $copy_to_path = FM_ROOT_PATH;
     $copy_to = fm_clean_path($_POST['copy_to']);
     if ($copy_to != '') {
@@ -815,20 +681,15 @@ if (isset($_POST['file'], $_POST['copy_to'], $_POST['finish'], $_POST['token']) 
             $FM_PATH=FM_PATH; fm_redirect(FM_SELF_URL . '?p=' . urlencode($FM_PATH));
         }
     }
-    // move?
     $move = isset($_POST['move']);
-    // copy/move
     $errors = 0;
     $files = $_POST['file'];
     if (is_array($files) && count($files)) {
         foreach ($files as $f) {
             if ($f != '') {
                 $f = fm_clean_path($f);
-                // abs path from
                 $from = $path . '/' . $f;
-                // abs path to
                 $dest = $copy_to_path . '/' . $f;
-                // do
                 if ($move) {
                     $rename = fm_rename($from, $dest);
                     if ($rename === false) {
@@ -854,25 +715,20 @@ if (isset($_POST['file'], $_POST['copy_to'], $_POST['finish'], $_POST['token']) 
     $FM_PATH=FM_PATH; fm_redirect(FM_SELF_URL . '?p=' . urlencode($FM_PATH));
 }
 
-// Rename
 if (isset($_POST['rename_from'], $_POST['rename_to'], $_POST['token']) && !FM_READONLY) {
     if(!verifyToken($_POST['token'])) {
         fm_set_msg("Invalid Token.", 'error');
     }
-    // old name
     $old = urldecode($_POST['rename_from']);
     $old = fm_clean_path($old);
     $old = str_replace('/', '', $old);
-    // new name
     $new = urldecode($_POST['rename_to']);
     $new = fm_clean_path(strip_tags($new));
     $new = str_replace('/', '', $new);
-    // path
     $path = FM_ROOT_PATH;
     if (FM_PATH != '') {
         $path .= '/' . FM_PATH;
     }
-    // rename
     if (fm_isvalid_filename($new) && $old != '' && $new != '') {
         if (fm_rename($path . '/' . $old, $path . '/' . $new)) {
             fm_set_msg(sprintf(lng('Renamed from').' <b>%s</b> '. lng('to').' <b>%s</b>', fm_enc($old), fm_enc($new)));
@@ -885,7 +741,6 @@ if (isset($_POST['rename_from'], $_POST['rename_to'], $_POST['token']) && !FM_RE
     $FM_PATH=FM_PATH; fm_redirect(FM_SELF_URL . '?p=' . urlencode($FM_PATH));
 }
 
-// Download
 if (isset($_GET['dl'], $_POST['token'])) {
     if(!verifyToken($_POST['token'])) {
         fm_set_msg("Invalid Token.", 'error');
@@ -907,7 +762,6 @@ if (isset($_GET['dl'], $_POST['token'])) {
     }
 }
 
-// Upload
 if (!empty($_FILES) && !FM_READONLY) {
     if(isset($_POST['token'])) {
         if(!verifyToken($_POST['token'])) {
@@ -969,7 +823,6 @@ if (!empty($_FILES) && !FM_READONLY) {
                     $in = @fopen($tmp_name, "rb");
                     if ($in) {
                         if (PHP_VERSION_ID < 80009) {
-                            // workaround https://bugs.php.net/bug.php?id=81145
                             do {
                                 for (;;) {
                                     $buff = fread($in, 4096);
@@ -1019,7 +872,6 @@ if (!empty($_FILES) && !FM_READONLY) {
                 }
 
             } else if (move_uploaded_file($tmp_name, $fullPath)) {
-                // Be sure that the file has been uploaded
                 if ( file_exists($fullPath) ) {
                     $response = array (
                         'status'    => 'success',
@@ -1044,12 +896,10 @@ if (!empty($_FILES) && !FM_READONLY) {
             'info'   => 'The specified folder for upload isn\'t writeable.'
         );
     }
-    // Return the response
     echo json_encode($response);
     exit();
 }
 
-// Mass deleting
 if (isset($_POST['group'], $_POST['delete'], $_POST['token']) && !FM_READONLY) {
 
     if(!verifyToken($_POST['token'])) {
@@ -1084,7 +934,6 @@ if (isset($_POST['group'], $_POST['delete'], $_POST['token']) && !FM_READONLY) {
     $FM_PATH=FM_PATH; fm_redirect(FM_SELF_URL . '?p=' . urlencode($FM_PATH));
 }
 
-// Pack files zip, tar
 if (isset($_POST['group'], $_POST['token']) && (isset($_POST['zip']) || isset($_POST['tar'])) && !FM_READONLY) {
 
     if(!verifyToken($_POST['token'])) {
@@ -1097,7 +946,6 @@ if (isset($_POST['group'], $_POST['token']) && (isset($_POST['zip']) || isset($_
         $path .= '/' . FM_PATH;
     }
 
-    //set pack type
     $ext = isset($_POST['tar']) ? 'tar' : 'zip';
 
     if (($ext == "zip" && !class_exists('ZipArchive')) || ($ext == "tar" && !class_exists('PharData'))) {
@@ -1108,7 +956,6 @@ if (isset($_POST['group'], $_POST['token']) && (isset($_POST['zip']) || isset($_
     $files = $_POST['file'];
     $sanitized_files = array();
 
-    // clean path
     foreach($files as $file){
         array_push($sanitized_files, fm_clean_path($file));
     }
@@ -1146,7 +993,6 @@ if (isset($_POST['group'], $_POST['token']) && (isset($_POST['zip']) || isset($_
     $FM_PATH=FM_PATH; fm_redirect(FM_SELF_URL . '?p=' . urlencode($FM_PATH));
 }
 
-// Unpack zip, tar
 if (isset($_POST['unzip'], $_POST['token']) && !FM_READONLY) {
 
     if(!verifyToken($_POST['token'])) {
@@ -1177,7 +1023,6 @@ if (isset($_POST['unzip'], $_POST['token']) && !FM_READONLY) {
     }
 
     if ($isValid) {
-        //to folder
         $tofolder = '';
         if (isset($_POST['tofolder'])) {
             $tofolder = pathinfo($zip_path, PATHINFO_FILENAME);
@@ -1198,7 +1043,6 @@ if (isset($_POST['unzip'], $_POST['token']) && !FM_READONLY) {
                     $res = false;
                 }
             } catch (Exception $e) {
-                //TODO:: need to handle the error
                 $res = true;
             }
         }
@@ -1214,7 +1058,6 @@ if (isset($_POST['unzip'], $_POST['token']) && !FM_READONLY) {
     $FM_PATH=FM_PATH; fm_redirect(FM_SELF_URL . '?p=' . urlencode($FM_PATH));
 }
 
-// Change Perms (not for Windows)
 if (isset($_POST['chmod'], $_POST['token']) && !FM_READONLY && !FM_IS_WIN) {
 
     if(!verifyToken($_POST['token'])) {
@@ -1272,20 +1115,15 @@ if (isset($_POST['chmod'], $_POST['token']) && !FM_READONLY && !FM_IS_WIN) {
     $FM_PATH=FM_PATH; fm_redirect(FM_SELF_URL . '?p=' . urlencode($FM_PATH));
 }
 
-/*************************** ACTIONS ***************************/
-
-// get current path
 $path = FM_ROOT_PATH;
 if (FM_PATH != '') {
     $path .= '/' . FM_PATH;
 }
 
-// check path
 if (!is_dir($path)) {
     fm_redirect(FM_SELF_URL . '?p=');
 }
 
-// get parent folder
 $parent = fm_get_parent_path(FM_PATH);
 
 $objects = is_readable($path) ? scandir($path) : array();
@@ -1316,11 +1154,9 @@ if (!empty($folders)) {
     natcasesort($folders);
 }
 
-// upload form
 if (isset($_GET['upload']) && !FM_READONLY) {
-    fm_show_header(); // HEADER
-    fm_show_nav_path(FM_PATH); // current path
-    //get the allowed file extensions
+    fm_show_header();
+    fm_show_nav_path(FM_PATH);
     function getUploadExt() {
         $extArr = explode(',', FM_UPLOAD_EXTENSION);
         if(FM_UPLOAD_EXTENSION && $extArr) {
@@ -1409,7 +1245,6 @@ if (isset($_GET['upload']) && !FM_READONLY) {
     exit;
 }
 
-// copy form POST
 if (isset($_POST['copy']) && !FM_READONLY) {
     $copy_files = isset($_POST['file']) ? $_POST['file'] : null;
     if (!is_array($copy_files) || empty($copy_files)) {
@@ -1417,8 +1252,8 @@ if (isset($_POST['copy']) && !FM_READONLY) {
         $FM_PATH=FM_PATH; fm_redirect(FM_SELF_URL . '?p=' . urlencode($FM_PATH));
     }
 
-    fm_show_header(); // HEADER
-    fm_show_nav_path(FM_PATH); // current path
+    fm_show_header();
+    fm_show_nav_path(FM_PATH);
     ?>
     <div class="path">
         <div class="card <?php echo fm_get_theme(); ?>">
@@ -1454,7 +1289,6 @@ if (isset($_POST['copy']) && !FM_READONLY) {
     exit;
 }
 
-// copy form
 if (isset($_GET['copy']) && !isset($_GET['finish']) && !FM_READONLY) {
     $copy = $_GET['copy'];
     $copy = fm_clean_path($copy);
@@ -1463,8 +1297,8 @@ if (isset($_GET['copy']) && !isset($_GET['finish']) && !FM_READONLY) {
         $FM_PATH=FM_PATH; fm_redirect(FM_SELF_URL . '?p=' . urlencode($FM_PATH));
     }
 
-    fm_show_header(); // HEADER
-    fm_show_nav_path(FM_PATH); // current path
+    fm_show_header();
+    fm_show_nav_path(FM_PATH);
     ?>
     <div class="path">
         <p><b>Copying</b></p>
@@ -1500,8 +1334,8 @@ if (isset($_GET['copy']) && !isset($_GET['finish']) && !FM_READONLY) {
 }
 
 if (isset($_GET['settings']) && !FM_READONLY) {
-    fm_show_header(); // HEADER
-    fm_show_nav_path(FM_PATH); // current path
+    fm_show_header();
+    fm_show_nav_path(FM_PATH);
     global $cfg, $lang, $lang_list;
     ?>
 
@@ -1583,8 +1417,8 @@ if (isset($_GET['settings']) && !FM_READONLY) {
 }
 
 if (isset($_GET['help'])) {
-    fm_show_header(); // HEADER
-    fm_show_nav_path(FM_PATH); // current path
+    fm_show_header();
+    fm_show_nav_path(FM_PATH);
     global $cfg, $lang;
     ?>
 
@@ -1637,7 +1471,6 @@ if (isset($_GET['help'])) {
     exit;
 }
 
-// file viewer
 if (isset($_GET['view'])) {
     $file = $_GET['view'];
     $file = fm_clean_path($file, false);
@@ -1647,8 +1480,8 @@ if (isset($_GET['view'])) {
         $FM_PATH=FM_PATH; fm_redirect(FM_SELF_URL . '?p=' . urlencode($FM_PATH));
     }
 
-    fm_show_header(); // HEADER
-    fm_show_nav_path(FM_PATH); // current path
+    fm_show_header();
+    fm_show_nav_path(FM_PATH);
 
     $file_url = FM_ROOT_URL . fm_convert_win((FM_PATH != '' ? '/' . FM_PATH : '') . '/' . $file);
     $file_path = $path . '/' . $file;
@@ -1667,8 +1500,8 @@ if (isset($_GET['view'])) {
     $is_onlineViewer = false;
 
     $view_title = 'File';
-    $filenames = false; // for zip
-    $content = ''; // for text
+    $filenames = false;
+    $content = '';
     $online_viewer = strtolower(FM_DOC_VIEWER);
 
     if($online_viewer && $online_viewer !== 'false' && in_array($ext, fm_get_onlineViewer_exts())){
@@ -1702,7 +1535,6 @@ if (isset($_GET['view'])) {
                 <strong>File size:</strong> <?php echo ($filesize_raw <= 1000) ? "$filesize_raw bytes" : $filesize; ?><br>
                 <strong>MIME-type:</strong> <?php echo $mime_type ?><br>
                 <?php
-                // ZIP info
                 if (($is_zip || $is_gzip) && $filenames !== false) {
                     $total_files = 0;
                     $total_comp = 0;
@@ -1721,12 +1553,10 @@ if (isset($_GET['view'])) {
                     <?php echo lng('Compression') ?>: <?php echo round(($total_comp / max($total_uncomp, 1)) * 100) ?>%<br>
                     <?php
                 }
-                // Image info
                 if ($is_image) {
                     $image_size = getimagesize($file_path);
                     echo '<strong>'.lng('Image size').':</strong> ' . (isset($image_size[0]) ? $image_size[0] : '0') . ' x ' . (isset($image_size[1]) ? $image_size[1] : '0') . '<br>';
                 }
-                // Text info
                 if ($is_text) {
                     $is_utf8 = fm_is_utf8($content);
                     if (function_exists('iconv')) {
@@ -1745,7 +1575,6 @@ if (isset($_GET['view'])) {
                 </form>
                 <b class="ms-2"><a href="<?php echo fm_enc($file_url) ?>" target="_blank"><i class="fa fa-external-link-square"></i> <?php echo lng('Open') ?></a></b>
                 <?php
-                // ZIP actions
                 if (!FM_READONLY && ($is_zip || $is_gzip) && $filenames !== false) {
                     $zip_name = pathinfo($file_path, PATHINFO_FILENAME);
                     ?>
@@ -1780,7 +1609,6 @@ if (isset($_GET['view'])) {
                     echo '<iframe src="https://view.officeapps.live.com/op/embed.aspx?src=' . fm_enc($file_url) . '" frameborder="no" style="width:100%;min-height:460px"></iframe>';
                 }
             } elseif ($is_zip) {
-                // ZIP content
                 if ($filenames !== false) {
                     echo '<code class="maxheight">';
                     foreach ($filenames as $fn) {
@@ -1795,19 +1623,15 @@ if (isset($_GET['view'])) {
                     echo '<p>'.lng('Error while fetching archive info').'</p>';
                 }
             } elseif ($is_image) {
-                // Image content
                 if (in_array($ext, array('gif', 'jpg', 'jpeg', 'png', 'bmp', 'ico', 'svg', 'webp', 'avif'))) {
                     echo '<p><input type="checkbox" id="preview-img-zoomCheck"><label for="preview-img-zoomCheck"><img src="' . fm_enc($file_url) . '" alt="image" class="preview-img"></label></p>';
                 }
             } elseif ($is_audio) {
-                // Audio content
                 echo '<p><audio src="' . fm_enc($file_url) . '" controls preload="metadata"></audio></p>';
             } elseif ($is_video) {
-                // Video content
                 echo '<div class="preview-video"><video src="' . fm_enc($file_url) . '" width="640" height="360" controls preload="metadata"></video></div>';
             } elseif ($is_text) {
                 if (FM_USE_HIGHLIGHTJS) {
-                    // highlight
                     $hljs_classes = array(
                         'shtml' => 'xml',
                         'htaccess' => 'apache',
@@ -1821,7 +1645,6 @@ if (isset($_GET['view'])) {
                     }
                     $content = '<pre class="with-hljs"><code class="' . $hljs_class . '">' . fm_enc($content) . '</code></pre>';
                 } elseif (in_array($ext, array('php', 'php4', 'php5', 'phtml', 'phps'))) {
-                    // php highlight
                     $content = highlight_string($content, true);
                 } else {
                     $content = '<pre>' . fm_enc($content) . '</pre>';
@@ -1836,7 +1659,6 @@ if (isset($_GET['view'])) {
     exit;
 }
 
-// file editor
 if (isset($_GET['edit']) && !FM_READONLY) {
     $file = $_GET['edit'];
     $file = fm_clean_path($file, false);
@@ -1847,13 +1669,12 @@ if (isset($_GET['edit']) && !FM_READONLY) {
     }
     $editFile = ' : <i><b>'. $file. '</b></i>';
     header('X-XSS-Protection:0');
-    fm_show_header(); // HEADER
-    fm_show_nav_path(FM_PATH); // current path
+    fm_show_header();
+    fm_show_nav_path(FM_PATH);
 
     $file_url = FM_ROOT_URL . fm_convert_win((FM_PATH != '' ? '/' . FM_PATH : '') . '/' . $file);
     $file_path = $path . '/' . $file;
 
-    // normal editer
     $isNormalEditor = true;
     if (isset($_GET['env'])) {
         if ($_GET['env'] == "ace") {
@@ -1861,7 +1682,6 @@ if (isset($_GET['edit']) && !FM_READONLY) {
         }
     }
 
-    // Save File
     if (isset($_POST['savedata'])) {
         $writedata = $_POST['savedata'];
         $fd = fopen($file_path, "w");
@@ -1874,7 +1694,7 @@ if (isset($_GET['edit']) && !FM_READONLY) {
     $mime_type = fm_get_mime_type($file_path);
     $filesize = filesize($file_path);
     $is_text = false;
-    $content = ''; // for text
+    $content = '';
 
     if (in_array($ext, fm_get_text_exts()) || substr($mime_type, 0, 4) == 'text' || in_array($mime_type, fm_get_text_mimes())) {
         $is_text = true;
@@ -1932,7 +1752,6 @@ if (isset($_GET['edit']) && !FM_READONLY) {
     exit;
 }
 
-// chmod (not for Windows)
 if (isset($_GET['chmod']) && !FM_READONLY && !FM_IS_WIN) {
     $file = $_GET['chmod'];
     $file = fm_clean_path($file);
@@ -1942,8 +1761,8 @@ if (isset($_GET['chmod']) && !FM_READONLY && !FM_IS_WIN) {
         $FM_PATH=FM_PATH; fm_redirect(FM_SELF_URL . '?p=' . urlencode($FM_PATH));
     }
 
-    fm_show_header(); // HEADER
-    fm_show_nav_path(FM_PATH); // current path
+    fm_show_header();
+    fm_show_nav_path(FM_PATH);
 
     $file_url = FM_ROOT_URL . (FM_PATH != '' ? '/' . FM_PATH : '') . '/' . $file;
     $file_path = $path . '/' . $file;
@@ -2005,11 +1824,9 @@ if (isset($_GET['chmod']) && !FM_READONLY && !FM_IS_WIN) {
     exit;
 }
 
-// --- TINYFILEMANAGER MAIN ---
-fm_show_header(); // HEADER
-fm_show_nav_path(FM_PATH); // current path
+fm_show_header();
+fm_show_nav_path(FM_PATH);
 
-// show alert messages
 fm_show_message();
 
 $num_files = count($files);
@@ -2042,7 +1859,6 @@ $tableTheme = (FM_THEME == "dark") ? "text-white bg-dark table-dark" : "bg-white
             </tr>
             </thead>
             <?php
-            // link to parent folder
             if ($parent !== false) {
                 ?>
                 <tr><?php if (!FM_READONLY): ?>
@@ -2237,19 +2053,10 @@ $tableTheme = (FM_THEME == "dark") ? "text-white bg-dark table-dark" : "bg-white
 <?php
 fm_show_footer();
 
-// --- END HTML ---
-
-// Functions
-
-/**
- * It prints the css/js files into html
- * @param key The key of the external file to print.
- */
 function print_external($key) {
     global $external;
 
     if(!array_key_exists($key, $external)) {
-        // throw new Exception('Key missing in external: ' . key);
         echo "<!-- EXTERNAL: MISSING KEY $key -->";
         return;
     }
@@ -2257,11 +2064,6 @@ function print_external($key) {
     echo "$external[$key]";
 }
 
-/**
- * Verify CSRF TOKEN and remove after cerify
- * @param string $token
- * @return bool
- */
 function verifyToken($token) 
 {
     if (hash_equals($_SESSION['token'], $token)) { 
@@ -2270,11 +2072,6 @@ function verifyToken($token)
     return false;
 }
 
-/**
- * Delete  file or folder (recursively)
- * @param string $path
- * @return bool
- */
 function fm_rdelete($path)
 {
     if (is_link($path)) {
@@ -2298,14 +2095,6 @@ function fm_rdelete($path)
     return false;
 }
 
-/**
- * Recursive chmod
- * @param string $path
- * @param int $filemode
- * @param int $dirmode
- * @return bool
- * @todo Will use in mass chmod
- */
 function fm_rchmod($path, $filemode, $dirmode)
 {
     if (is_dir($path)) {
@@ -2331,11 +2120,6 @@ function fm_rchmod($path, $filemode, $dirmode)
     return false;
 }
 
-/**
- * Check the file extension which is allowed or not
- * @param string $filename
- * @return bool
- */
 function fm_is_valid_ext($filename)
 {
     $allowed = (FM_FILE_EXTENSION) ? explode(',', FM_FILE_EXTENSION) : false;
@@ -2346,12 +2130,6 @@ function fm_is_valid_ext($filename)
     return ($isFileAllowed) ? true : false;
 }
 
-/**
- * Safely rename
- * @param string $old
- * @param string $new
- * @return bool|null
- */
 function fm_rename($old, $new)
 {
     $isFileAllowed = fm_is_valid_ext($new);
@@ -2363,14 +2141,6 @@ function fm_rename($old, $new)
     return (!file_exists($new) && file_exists($old)) ? rename($old, $new) : null;
 }
 
-/**
- * Copy file or folder (recursively).
- * @param string $path
- * @param string $dest
- * @param bool $upd Update files
- * @param bool $force Create folder with same names instead file
- * @return bool
- */
 function fm_rcopy($path, $dest, $upd = true, $force = true)
 {
     if (is_dir($path)) {
@@ -2395,12 +2165,6 @@ function fm_rcopy($path, $dest, $upd = true, $force = true)
     return false;
 }
 
-/**
- * Safely create folder
- * @param string $dir
- * @param bool $force
- * @return bool
- */
 function fm_mkdir($dir, $force)
 {
     if (file_exists($dir)) {
@@ -2414,13 +2178,6 @@ function fm_mkdir($dir, $force)
     return mkdir($dir, 0777, true);
 }
 
-/**
- * Safely copy file
- * @param string $f1
- * @param string $f2
- * @param bool $upd Indicates if file should be updated with new content
- * @return bool
- */
 function fm_copy($f1, $f2, $upd)
 {
     $time1 = filemtime($f1);
@@ -2437,11 +2194,6 @@ function fm_copy($f1, $f2, $upd)
     return $ok;
 }
 
-/**
- * Get mime type
- * @param string $file_path
- * @return mixed|string
- */
 function fm_get_mime_type($file_path)
 {
     if (function_exists('finfo_open')) {
@@ -2460,23 +2212,12 @@ function fm_get_mime_type($file_path)
     }
 }
 
-/**
- * HTTP Redirect
- * @param string $url
- * @param int $code
- */
 function fm_redirect($url, $code = 302)
 {
     header('Location: ' . $url, true, $code);
     exit;
 }
 
-/**
- * Path traversal prevention and clean the url
- * It replaces (consecutive) occurrences of / and \\ with whatever is in DIRECTORY_SEPARATOR, and processes /. and /.. fine.
- * @param $path
- * @return string
- */
 function get_absolute_path($path) {
     $path = str_replace(array('/', '\\'), DIRECTORY_SEPARATOR, $path);
     $parts = array_filter(explode(DIRECTORY_SEPARATOR, $path), 'strlen');
@@ -2492,11 +2233,6 @@ function get_absolute_path($path) {
     return implode(DIRECTORY_SEPARATOR, $absolutes);
 }
 
-/**
- * Clean path
- * @param string $path
- * @return string
- */
 function fm_clean_path($path, $trim = true)
 {
     $path = $trim ? trim($path) : $path;
@@ -2509,11 +2245,6 @@ function fm_clean_path($path, $trim = true)
     return str_replace('\\', '/', $path);
 }
 
-/**
- * Get parent path
- * @param string $path
- * @return bool|string
- */
 function fm_get_parent_path($path)
 {
     $path = fm_clean_path($path);
@@ -2552,11 +2283,6 @@ function fm_get_display_path($file_path)
     }
 }
 
-/**
- * Check file is in exclude list
- * @param string $file
- * @return bool
- */
 function fm_is_exclude_items($file) {
     $ext = strtolower(pathinfo($file, PATHINFO_EXTENSION));
     if (isset($exclude_items) and sizeof($exclude_items)) {
@@ -2573,11 +2299,6 @@ function fm_is_exclude_items($file) {
     return false;
 }
 
-/**
- * get language translations from json file
- * @param int $tr
- * @return array
- */
 function fm_get_translations($tr) {
     try {
         $content = @file_get_contents('translation.json');
@@ -2600,12 +2321,6 @@ function fm_get_translations($tr) {
     }
 }
 
-/**
- * @param string $file
- * Recover all file sizes larger than > 2GB.
- * Works on php 32bits and 64bits and supports linux
- * @return int|string
- */
 function fm_get_size($file)
 {
     static $iswin;
@@ -2622,7 +2337,6 @@ function fm_get_size($file)
         $exec_works = (function_exists('exec') && !ini_get('safe_mode') && @exec('echo EXEC') == 'EXEC');
     }
 
-    // try the Windows COM interface
     if ($iswin && class_exists("COM")) {
         try {
             $fsobj = new COM('Scripting.FileSystemObject');
@@ -2636,15 +2350,9 @@ function fm_get_size($file)
         }
     }
 
-    // if all else fails
     return filesize($file);
 }
 
-/**
- * Get nice filesize
- * @param int $size
- * @return string
- */
 function fm_get_filesize($size)
 {
     $size = (float) $size;
@@ -2654,12 +2362,6 @@ function fm_get_filesize($size)
     return sprintf('%s %s', round($size / pow(1024, $power), 2), $units[$power]);
 }
 
-/**
- * Get total size of directory tree.
- *
- * @param  string $directory Relative or absolute directory name.
- * @return int Total number of bytes.
- */
 function fm_get_directorysize($directory) {
     $bytes = 0;
     $directory = realpath($directory);
@@ -2671,11 +2373,6 @@ function fm_get_directorysize($directory) {
     return $bytes;
 }
 
-/**
- * Get info about zip archive
- * @param string $path
- * @return array|bool
- */
 function fm_get_zif_info($path, $ext) {
     if ($ext == 'zip' && function_exists('zip_open')) {
         $arch = @zip_open($path);
@@ -2689,7 +2386,6 @@ function fm_get_zif_info($path, $ext) {
                     'filesize' => @zip_entry_filesize($zip_entry),
                     'compressed_size' => @zip_entry_compressedsize($zip_entry),
                     'folder' => $zip_folder
-                    //'compression_method' => zip_entry_compressionmethod($zip_entry),
                 );
             }
             @zip_close($arch);
@@ -2716,51 +2412,26 @@ function fm_get_zif_info($path, $ext) {
     return false;
 }
 
-/**
- * Encode html entities
- * @param string $text
- * @return string
- */
 function fm_enc($text)
 {
     return htmlspecialchars($text, ENT_QUOTES, 'UTF-8');
 }
 
-/**
- * Prevent XSS attacks
- * @param string $text
- * @return string
- */
 function fm_isvalid_filename($text) {
     return (strpbrk($text, '/?%*:|"<>') === FALSE) ? true : false;
 }
 
-/**
- * Save message in session
- * @param string $msg
- * @param string $status
- */
 function fm_set_msg($msg, $status = 'ok')
 {
     $_SESSION[FM_SESSION_ID]['message'] = $msg;
     $_SESSION[FM_SESSION_ID]['status'] = $status;
 }
 
-/**
- * Check if string is in UTF-8
- * @param string $string
- * @return int
- */
 function fm_is_utf8($string)
 {
     return preg_match('//u', $string);
 }
 
-/**
- * Convert file name to UTF-8 in Windows
- * @param string $filename
- * @return string
- */
 function fm_convert_win($filename)
 {
     if (FM_IS_WIN && function_exists('iconv')) {
@@ -2769,10 +2440,6 @@ function fm_convert_win($filename)
     return $filename;
 }
 
-/**
- * @param $obj
- * @return array
- */
 function fm_object_to_array($obj)
 {
     if (!is_object($obj) && !is_array($obj)) {
@@ -2784,14 +2451,8 @@ function fm_object_to_array($obj)
     return array_map('fm_object_to_array', $obj);
 }
 
-/**
- * Get CSS classname for file
- * @param string $path
- * @return string
- */
 function fm_get_file_icon_class($path)
 {
-    // get extension
     $ext = strtolower(pathinfo($path, PATHINFO_EXTENSION));
 
     switch ($ext) {
@@ -2983,37 +2644,21 @@ function fm_get_file_icon_class($path)
     return $img;
 }
 
-/**
- * Get image files extensions
- * @return array
- */
 function fm_get_image_exts()
 {
     return array('ico', 'gif', 'jpg', 'jpeg', 'jpc', 'jp2', 'jpx', 'xbm', 'wbmp', 'png', 'bmp', 'tif', 'tiff', 'psd', 'svg', 'webp', 'avif');
 }
 
-/**
- * Get video files extensions
- * @return array
- */
 function fm_get_video_exts()
 {
     return array('avi', 'webm', 'wmv', 'mp4', 'm4v', 'ogm', 'ogv', 'mov', 'mkv');
 }
 
-/**
- * Get audio files extensions
- * @return array
- */
 function fm_get_audio_exts()
 {
     return array('wav', 'mp3', 'ogg', 'm4a');
 }
 
-/**
- * Get text file extensions
- * @return array
- */
 function fm_get_text_exts()
 {
     return array(
@@ -3026,10 +2671,6 @@ function fm_get_text_exts()
     );
 }
 
-/**
- * Get mime types of text files
- * @return array
- */
 function fm_get_text_mimes()
 {
     return array(
@@ -3042,10 +2683,6 @@ function fm_get_text_mimes()
     );
 }
 
-/**
- * Get file names of text files w/o extensions
- * @return array
- */
 function fm_get_text_names()
 {
     return array(
@@ -3057,20 +2694,11 @@ function fm_get_text_names()
     );
 }
 
-/**
- * Get online docs viewer supported files extensions
- * @return array
- */
 function fm_get_onlineViewer_exts()
 {
     return array('doc', 'docx', 'xls', 'xlsx', 'pdf', 'ppt', 'pptx', 'ai', 'psd', 'dxf', 'xps', 'rar', 'odt', 'ods');
 }
 
-/**
- * It returns the mime type of a file based on its extension.
- * @param extension The file extension of the file you want to get the mime type for.
- * @return string|string[] The mime type of the file.
- */
 function fm_get_file_mimes($extension)
 {
     $fileTypes['swf'] = 'application/x-shockwave-flash';
@@ -3113,19 +2741,12 @@ function fm_get_file_mimes($extension)
     $fileTypes['php'] = ['application/x-php'];
     $fileTypes['html'] = ['text/html'];
     $fileTypes['txt'] = ['text/plain'];
-    //Unknown mime-types should be 'application/octet-stream'
     if(empty($fileTypes[$extension])) {
       $fileTypes[$extension] = ['application/octet-stream'];
     }
     return $fileTypes[$extension];
 }
 
-/**
- * This function scans the files and folder recursively, and return matching files
- * @param string $dir
- * @param string $filter
- * @return array|null
- */
  function scan($dir = '', $filter = '') {
     $path = FM_ROOT_PATH.'/'.$dir;
      if($path) {
@@ -3148,13 +2769,6 @@ function fm_get_file_mimes($extension)
      }
 }
 
-/**
-* Parameters: downloadFile(File Location, File Name,
-* max speed, is streaming
-* If streaming - videos will show as videos, images as images
-* instead of download prompt
-* https://stackoverflow.com/a/13821992/1164642
-*/
 function fm_download_file($fileLocation, $fileName, $chunkSize  = 1024)
 {
     if (connection_status() != 0)
@@ -3185,7 +2799,6 @@ function fm_download_file($fileLocation, $fileName, $chunkSize  = 1024)
         return (false);
     }
 
-    // headers
     header('Content-Description: File Transfer');
     header('Expires: 0');
     header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
@@ -3227,10 +2840,6 @@ function fm_download_file($fileLocation, $fileName, $chunkSize  = 1024)
     return ((connection_status() == 0) and !connection_aborted());
 }
 
-/**
- * If the theme is dark, return the text-white and bg-dark classes.
- * @return string the value of the  variable.
- */
 function fm_get_theme() {
     $result = '';
     if(FM_THEME == "dark") {
@@ -3239,9 +2848,6 @@ function fm_get_theme() {
     return $result;
 }
 
-/**
- * Class to work with zip files (using ZipArchive)
- */
 class FM_Zipper
 {
     private $zip;
@@ -3251,12 +2857,7 @@ class FM_Zipper
         $this->zip = new ZipArchive();
     }
 
-    /**
-     * Create archive with name $filename and files $files (RELATIVE PATHS!)
-     * @param string $filename
-     * @param array|string $files
-     * @return bool
-     */
+    
     public function create($filename, $files)
     {
         $res = $this->zip->open($filename, ZipArchive::CREATE);
@@ -3282,12 +2883,7 @@ class FM_Zipper
         }
     }
 
-    /**
-     * Extract archive $filename to folder $path (RELATIVE OR ABSOLUTE PATHS)
-     * @param string $filename
-     * @param string $path
-     * @return bool
-     */
+    
     public function unzip($filename, $path)
     {
         $res = $this->zip->open($filename);
@@ -3301,11 +2897,7 @@ class FM_Zipper
         return false;
     }
 
-    /**
-     * Add file/folder to archive
-     * @param string $filename
-     * @return bool
-     */
+    
     private function addFileOrDir($filename)
     {
         if (is_file($filename)) {
@@ -3316,11 +2908,7 @@ class FM_Zipper
         return false;
     }
 
-    /**
-     * Add folder recursively
-     * @param string $path
-     * @return bool
-     */
+    
     private function addDir($path)
     {
         if (!$this->zip->addEmptyDir($path)) {
@@ -3347,9 +2935,6 @@ class FM_Zipper
     }
 }
 
-/**
- * Class to work with Tar files (using PharData)
- */
 class FM_Zipper_Tar
 {
     private $tar;
@@ -3359,12 +2944,7 @@ class FM_Zipper_Tar
         $this->tar = null;
     }
 
-    /**
-     * Create archive with name $filename and files $files (RELATIVE PATHS!)
-     * @param string $filename
-     * @param array|string $files
-     * @return bool
-     */
+    
     public function create($filename, $files)
     {
         $this->tar = new PharData($filename);
@@ -3384,12 +2964,7 @@ class FM_Zipper_Tar
         }
     }
 
-    /**
-     * Extract archive $filename to folder $path (RELATIVE OR ABSOLUTE PATHS)
-     * @param string $filename
-     * @param string $path
-     * @return bool
-     */
+    
     public function unzip($filename, $path)
     {
         $res = $this->tar->open($filename);
@@ -3402,11 +2977,7 @@ class FM_Zipper_Tar
         return false;
     }
 
-    /**
-     * Add file/folder to archive
-     * @param string $filename
-     * @return bool
-     */
+    
     private function addFileOrDir($filename)
     {
         if (is_file($filename)) {
@@ -3422,11 +2993,7 @@ class FM_Zipper_Tar
         return false;
     }
 
-    /**
-     * Add folder recursively
-     * @param string $path
-     * @return bool
-     */
+    
     private function addDir($path)
     {
         $objects = scandir($path);
@@ -3452,9 +3019,6 @@ class FM_Zipper_Tar
     }
 }
 
-/**
- * Save Configuration
- */
  class FM_Config
 {
      var $data;
@@ -3504,12 +3068,6 @@ class FM_Zipper_Tar
     }
 }
 
-//--- Templates Functions ---
-
-/**
- * Show nav block
- * @param string $path
- */
 function fm_show_nav_path($path)
 {
     global $lang, $sticky_navbar, $editFile;
@@ -3597,9 +3155,6 @@ function fm_show_nav_path($path)
     <?php
 }
 
-/**
- * Show alert message from session
- */
 function fm_show_message()
 {
     if (isset($_SESSION[FM_SESSION_ID]['message'])) {
@@ -3610,9 +3165,6 @@ function fm_show_message()
     }
 }
 
-/**
- * Show page header in Login Form
- */
 function fm_show_header_login()
 {
 $sprites_ver = '20160315';
@@ -3668,9 +3220,7 @@ global $lang, $root_url, $favicon_path;
     <?php
     }
 
-    /**
-     * Show page footer in Login Form
-     */
+    
     function fm_show_footer_login()
     {
     ?>
@@ -3682,9 +3232,6 @@ global $lang, $root_url, $favicon_path;
 <?php
 }
 
-/**
- * Show Header after login
- */
 function fm_show_header()
 {
 $sprites_ver = '20160315';
@@ -3966,9 +3513,7 @@ $isStickyNavBar = $sticky_navbar ? 'navbar-fixed' : 'navbar-normal';
     <?php
     }
 
-    /**
-     * Show page footer after login
-     */
+    
     function fm_show_footer()
     {
     ?>
@@ -3993,16 +3538,14 @@ $isStickyNavBar = $sticky_navbar ? 'navbar-fixed' : 'navbar-normal';
     function unselect_all() { change_checkboxes(get_checkboxes(), !1) }
     function invert_all() { change_checkboxes(get_checkboxes()) }
     function checkbox_toggle() { var e = get_checkboxes(); e.push(this), change_checkboxes(e) }
-    function backup(e, t) { // Create file backup with .bck
+    function backup(e, t) {
         var n = new XMLHttpRequest,
             a = "path=" + e + "&file=" + t + "&token="+ window.csrf +"&type=backup&ajax=true";
         return n.open("POST", "", !0), n.setRequestHeader("Content-type", "application/x-www-form-urlencoded"), n.onreadystatechange = function () {
             4 == n.readyState && 200 == n.status && toast(n.responseText)
         }, n.send(a), !1
     }
-    // Toast message
     function toast(txt) { var x = document.getElementById("snackbar");x.innerHTML=txt;x.className = "show";setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000); }
-    // Save file
     function edit_save(e, t) {
         var n = "ace" == t ? editor.getSession().getValue() : document.getElementById("normal-editor").value;
         if (typeof n !== 'undefined' && n !== null) {
@@ -4030,7 +3573,6 @@ $isStickyNavBar = $sticky_navbar ? 'navbar-fixed' : 'navbar-normal';
         }
     }
     function show_new_pwd() { $(".js-new-pwd").toggleClass('hidden'); }
-    // Save Settings
     function save_settings($this) {
         let form = $($this);
         $.ajax({
@@ -4038,7 +3580,6 @@ $isStickyNavBar = $sticky_navbar ? 'navbar-fixed' : 'navbar-normal';
             success: function (data) {if(data) { window.location.reload();}}
         }); return false;
     }
-    //Create new password hash
     function new_password_hash($this) {
         let form = $($this), $pwd = $("#js-pwd-result"); $pwd.val('');
         $.ajax({
@@ -4046,7 +3587,6 @@ $isStickyNavBar = $sticky_navbar ? 'navbar-fixed' : 'navbar-normal';
             success: function (data) { if(data) { $pwd.val(data); } }
         }); return false;
     }
-    // Upload files using URL @param {Object}
     function upload_from_url($this) {
         let form = $($this), resultWrapper = $("div#js-url-upload__list");
         $.ajax({
@@ -4066,7 +3606,6 @@ $isStickyNavBar = $sticky_navbar ? 'navbar-fixed' : 'navbar-normal';
             }
         }); return false;
     }
-    // Search template
     function search_template(data) {
         var response = "";
         $.each(data, function (key, val) {
@@ -4074,7 +3613,6 @@ $isStickyNavBar = $sticky_navbar ? 'navbar-fixed' : 'navbar-normal';
         });
         return response;
     }
-    // Advance search
     function fm_search() {
         var searchTxt = $("input#advanced-search").val(), searchWrapper = $("ul#search-wrapper"), path = $("#js-search-modal").attr("href"), _html = "", $loader = $("div.lds-facebook");
         if(!!searchTxt && searchTxt.length > 2 && path) {
@@ -4101,7 +3639,6 @@ $isStickyNavBar = $sticky_navbar ? 'navbar-fixed' : 'navbar-normal';
         } else { searchWrapper.html("OOPS: minimum 3 characters required!"); }
     }
 
-    // action confirm dailog modal
     function confirmDailog(e, id = 0, title = "Action", content = "", action = null) {
         e.preventDefault();
         const tplObj = {id, title, content: decodeURIComponent(content.replace(/\+/g, ' ')), action};
@@ -4114,18 +3651,14 @@ $isStickyNavBar = $sticky_navbar ? 'navbar-fixed' : 'navbar-normal';
     }
     
 
-    // on mouse hover image preview
     !function(s){s.previewImage=function(e){var o=s(document),t=".previewImage",a=s.extend({xOffset:20,yOffset:-20,fadeIn:"fast",css:{padding:"5px",border:"1px solid #cccccc","background-color":"#fff"},eventSelector:"[data-preview-image]",dataKey:"previewImage",overlayId:"preview-image-plugin-overlay"},e);return o.off(t),o.on("mouseover"+t,a.eventSelector,function(e){s("p#"+a.overlayId).remove();var o=s("<p>").attr("id",a.overlayId).css("position","absolute").css("display","none").append(s('<img class="c-preview-img">').attr("src",s(this).data(a.dataKey)));a.css&&o.css(a.css),s("body").append(o),o.css("top",e.pageY+a.yOffset+"px").css("left",e.pageX+a.xOffset+"px").fadeIn(a.fadeIn)}),o.on("mouseout"+t,a.eventSelector,function(){s("#"+a.overlayId).remove()}),o.on("mousemove"+t,a.eventSelector,function(e){s("#"+a.overlayId).css("top",e.pageY+a.yOffset+"px").css("left",e.pageX+a.xOffset+"px")}),this},s.previewImage()}(jQuery);
 
-    // Dom Ready Events
     $(document).ready( function () {
-        // dataTable init
         var $table = $('#main-table'),
             tableLng = $table.find('th').length,
             _targets = (tableLng && tableLng == 7 ) ? [0, 4,5,6] : tableLng == 5 ? [0,4] : [3];
             mainTable = $('#main-table').DataTable({paging: false, info: false, order: [], columnDefs: [{targets: _targets, orderable: false}]
         });
-        // filter table
         $('#search-addon').on( 'keyup', function () {
             mainTable.search( this.value ).draw();
         });
@@ -4133,7 +3666,6 @@ $isStickyNavBar = $sticky_navbar ? 'navbar-fixed' : 'navbar-normal';
             if (e.keyCode === 13) { fm_search(); }
         });
         $('#search-addon3').on( 'click', function () { fm_search(); });
-        //upload nav tabs
         $(".fm-upload-wrapper .card-header-tabs").on("click", 'a', function(e){
             e.preventDefault();let target=$(this).data('target');
             $(".fm-upload-wrapper .card-header-tabs a").removeClass('active');$(this).addClass('active');
@@ -4150,8 +3682,7 @@ $isStickyNavBar = $sticky_navbar ? 'navbar-fixed' : 'navbar-normal';
     <script>
         var editor = ace.edit("editor");
         editor.getSession().setMode( {path:"ace/mode/<?php echo $ext; ?>", inline:true} );
-        //editor.setTheme("ace/theme/twilight"); //Dark Theme
-        editor.setShowPrintMargin(false); // Hide the vertical ruler
+        editor.setShowPrintMargin(false);
         function ace_commend (cmd) { editor.commands.exec(cmd, editor); }
         editor.commands.addCommands([{
             name: 'save', bindKey: {win: 'Ctrl-S',  mac: 'Command-S'},
@@ -4159,13 +3690,13 @@ $isStickyNavBar = $sticky_navbar ? 'navbar-fixed' : 'navbar-normal';
         }]);
         function renderThemeMode() {
             var $modeEl = $("select#js-ace-mode"), $themeEl = $("select#js-ace-theme"), $fontSizeEl = $("select#js-ace-fontSize"), optionNode = function(type, arr){ var $Option = ""; $.each(arr, function(i, val) { $Option += "<option value='"+type+i+"'>" + val + "</option>"; }); return $Option; },
-                _data = {"aceTheme":{"bright":{"chrome":"Chrome","clouds":"Clouds","crimson_editor":"Crimson Editor","dawn":"Dawn","dreamweaver":"Dreamweaver","eclipse":"Eclipse","github":"GitHub","iplastic":"IPlastic","solarized_light":"Solarized Light","textmate":"TextMate","tomorrow":"Tomorrow","xcode":"XCode","kuroir":"Kuroir","katzenmilch":"KatzenMilch","sqlserver":"SQL Server"},"dark":{"ambiance":"Ambiance","chaos":"Chaos","clouds_midnight":"Clouds Midnight","dracula":"Dracula","cobalt":"Cobalt","gruvbox":"Gruvbox","gob":"Green on Black","idle_fingers":"idle Fingers","kr_theme":"krTheme","merbivore":"Merbivore","merbivore_soft":"Merbivore Soft","mono_industrial":"Mono Industrial","monokai":"Monokai","pastel_on_dark":"Pastel on dark","solarized_dark":"Solarized Dark","terminal":"Terminal","tomorrow_night":"Tomorrow Night","tomorrow_night_blue":"Tomorrow Night Blue","tomorrow_night_bright":"Tomorrow Night Bright","tomorrow_night_eighties":"Tomorrow Night 80s","twilight":"Twilight","vibrant_ink":"Vibrant Ink"}},"aceMode":{"javascript":"JavaScript","abap":"ABAP","abc":"ABC","actionscript":"ActionScript","ada":"ADA","apache_conf":"Apache Conf","asciidoc":"AsciiDoc","asl":"ASL","assembly_x86":"Assembly x86","autohotkey":"AutoHotKey","apex":"Apex","batchfile":"BatchFile","bro":"Bro","c_cpp":"C and C++","c9search":"C9Search","cirru":"Cirru","clojure":"Clojure","cobol":"Cobol","coffee":"CoffeeScript","coldfusion":"ColdFusion","csharp":"C#","csound_document":"Csound Document","csound_orchestra":"Csound","csound_score":"Csound Score","css":"CSS","curly":"Curly","d":"D","dart":"Dart","diff":"Diff","dockerfile":"Dockerfile","dot":"Dot","drools":"Drools","edifact":"Edifact","eiffel":"Eiffel","ejs":"EJS","elixir":"Elixir","elm":"Elm","erlang":"Erlang","forth":"Forth","fortran":"Fortran","fsharp":"FSharp","fsl":"FSL","ftl":"FreeMarker","gcode":"Gcode","gherkin":"Gherkin","gitignore":"Gitignore","glsl":"Glsl","gobstones":"Gobstones","golang":"Go","graphqlschema":"GraphQLSchema","groovy":"Groovy","haml":"HAML","handlebars":"Handlebars","haskell":"Haskell","haskell_cabal":"Haskell Cabal","haxe":"haXe","hjson":"Hjson","html":"HTML","html_elixir":"HTML (Elixir)","html_ruby":"HTML (Ruby)","ini":"INI","io":"Io","jack":"Jack","jade":"Jade","java":"Java","json":"JSON","jsoniq":"JSONiq","jsp":"JSP","jssm":"JSSM","jsx":"JSX","julia":"Julia","kotlin":"Kotlin","latex":"LaTeX","less":"LESS","liquid":"Liquid","lisp":"Lisp","livescript":"LiveScript","logiql":"LogiQL","lsl":"LSL","lua":"Lua","luapage":"LuaPage","lucene":"Lucene","makefile":"Makefile","markdown":"Markdown","mask":"Mask","matlab":"MATLAB","maze":"Maze","mel":"MEL","mixal":"MIXAL","mushcode":"MUSHCode","mysql":"MySQL","nix":"Nix","nsis":"NSIS","objectivec":"Objective-C","ocaml":"OCaml","pascal":"Pascal","perl":"Perl","perl6":"Perl 6","pgsql":"pgSQL","php_laravel_blade":"PHP (Blade Template)","php":"PHP","puppet":"Puppet","pig":"Pig","powershell":"Powershell","praat":"Praat","prolog":"Prolog","properties":"Properties","protobuf":"Protobuf","python":"Python","r":"R","razor":"Razor","rdoc":"RDoc","red":"Red","rhtml":"RHTML","rst":"RST","ruby":"Ruby","rust":"Rust","sass":"SASS","scad":"SCAD","scala":"Scala","scheme":"Scheme","scss":"SCSS","sh":"SH","sjs":"SJS","slim":"Slim","smarty":"Smarty","snippets":"snippets","soy_template":"Soy Template","space":"Space","sql":"SQL","sqlserver":"SQLServer","stylus":"Stylus","svg":"SVG","swift":"Swift","tcl":"Tcl","terraform":"Terraform","tex":"Tex","text":"Text","textile":"Textile","toml":"Toml","tsx":"TSX","twig":"Twig","typescript":"Typescript","vala":"Vala","vbscript":"VBScript","velocity":"Velocity","verilog":"Verilog","vhdl":"VHDL","visualforce":"Visualforce","wollok":"Wollok","xml":"XML","xquery":"XQuery","yaml":"YAML","django":"Django"},"fontSize":{8:8,10:10,11:11,12:12,13:13,14:14,15:15,16:16,17:17,18:18,20:20,22:22,24:24,26:26,30:30}};
+                _data = {"aceTheme":{"bright":{"github":"GitHub","chrome":"Chrome"},"dark":{"monokai":"Monokai","dracula":"Dracula","tomorrow_night":"Tomorrow Night","solarized_dark":"Solarized Dark"}},"aceMode":{"sh":"SH","lua":"Lua","json":"JSON","yaml":"YAML","ini":"INI","nginx":"Nginx","php":"PHP","javascript":"JavaScript","css":"CSS","html":"HTML","xml":"XML","python":"Python","dockerfile":"Dockerfile","makefile":"Makefile","text":"Text","markdown":"Markdown","toml":"Toml","properties":"Properties","diff":"Diff","sql":"SQL"},"fontSize":{8:8,10:10,11:11,12:12,13:13,14:14,15:15,16:16,18:18,20:20,24:24}};
             if(_data && _data.aceMode) { $modeEl.html(optionNode("ace/mode/", _data.aceMode)); }
             if(_data && _data.aceTheme) { var lightTheme = optionNode("ace/theme/", _data.aceTheme.bright), darkTheme = optionNode("ace/theme/", _data.aceTheme.dark); $themeEl.html("<optgroup label=\"Bright\">"+lightTheme+"</optgroup><optgroup label=\"Dark\">"+darkTheme+"</optgroup>");}
             if(_data && _data.fontSize) { $fontSizeEl.html(optionNode("", _data.fontSize)); }
             $modeEl.val( editor.getSession().$modeId );
             $themeEl.val( editor.getTheme() );
-            $fontSizeEl.val(12).change(); //set default font size in drop down
+            $fontSizeEl.val(12).change();
         }
 
         $(function(){
@@ -4205,15 +3736,9 @@ $isStickyNavBar = $sticky_navbar ? 'navbar-fixed' : 'navbar-normal';
 <?php
 }
 
-/**
- * Language Translation System
- * @param string $txt
- * @return string
- */
 function lng($txt) {
     global $lang;
 
-    // English Language
     $tr['en']['AppName']        = 'Tiny File Manager';      $tr['en']['AppTitle']           = 'File Manager';
     $tr['en']['Login']          = 'Sign in';                $tr['en']['Username']           = 'Username';
     $tr['en']['Password']       = 'Password';               $tr['en']['Logout']             = 'Sign Out';
