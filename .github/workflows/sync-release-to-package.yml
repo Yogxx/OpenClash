@@ -1,8 +1,6 @@
 name: Sync Release to Package Branch
 
 on:
-  # Auto-run langsung setelah Workflow 1 selesai sukses
-  # Lebih reliable untuk repo fork dibanding release: published
   workflow_run:
     workflows: ["OpenClash Auto Release"]
     types: [completed]
@@ -25,7 +23,6 @@ env:
 jobs:
   sync:
     runs-on: ubuntu-latest
-    # Jika dari workflow_run, hanya lanjut kalau upstream sukses
     if: >
       github.event_name == 'workflow_dispatch' ||
       github.event.workflow_run.conclusion == 'success'
@@ -40,16 +37,15 @@ jobs:
       - name: Resolve release tag
         id: tag
         env:
-          EVENT_NAME: ${{ github.event_name }}
           INPUT_TAG: ${{ github.event.inputs.tag }}
           REPO: ${{ github.repository }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           if [ -n "$INPUT_TAG" ]; then
             TAG="$INPUT_TAG"
           else
-            # Untuk workflow_run atau workflow_dispatch tanpa input:
-            # ambil release terbaru via API
-            TAG=$(curl -s "https://api.github.com/repos/$REPO/releases/latest" \
+            TAG=$(curl -s -H "Authorization: Bearer $GH_TOKEN" \
+              "https://api.github.com/repos/$REPO/releases/latest" \
               | jq -r .tag_name)
           fi
 
@@ -65,19 +61,22 @@ jobs:
         env:
           TAG: ${{ steps.tag.outputs.tag }}
           REPO: ${{ github.repository }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -e
           mkdir -p assets
 
           echo "📦 Fetching assets for tag: $TAG"
 
-          curl -s "https://api.github.com/repos/$REPO/releases/tags/$TAG" \
+          curl -s -H "Authorization: Bearer $GH_TOKEN" \
+            "https://api.github.com/repos/$REPO/releases/tags/$TAG" \
             | jq -r '.assets[].browser_download_url' \
             | grep -E '\.(ipk|apk)$' \
             | while read -r url; do
                 FILENAME=$(basename "$url")
                 echo "⬇️  Downloading $FILENAME"
-                curl -fsSL "$url" -o "assets/$FILENAME"
+                curl -fsSL -H "Authorization: Bearer $GH_TOKEN" \
+                  "$url" -o "assets/$FILENAME"
               done
 
           TOTAL=$(find assets -name "*.ipk" -o -name "*.apk" | wc -l)
@@ -111,7 +110,6 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-          # Gunakan git add -A agar file baru, modifikasi, dan hapus semua ter-track
           git add -A "${PACKAGE_DIR}"
 
           echo "=== Git status ==="
@@ -119,4 +117,3 @@ jobs:
 
           git commit --allow-empty -m "sync: OpenClash ${TAG}"
           git push
-          
