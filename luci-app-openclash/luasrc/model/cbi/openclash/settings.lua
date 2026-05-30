@@ -62,14 +62,14 @@ s:tab("dns", "DNS "..translate("Settings"))
 s:tab("stream_enhance", translate("Streaming Enhance"))
 --s:tab("lan_ac", translate("Black&White"))
 s:tab("dashboard", translate("Dashboard Settings"))
---s:tab("ipv6", translate("IPv6 Settings"))
-s:tab("rules_update", translate("Rules Update"))
+s:tab("ipv6", translate("IPv6 Settings"))
+--s:tab("rules_update", translate("Rules Update"))
 s:tab("geo_update", translate("GEO Update"))
-s:tab("chnr_update", translate("Chnroute Update"))
+--s:tab("chnr_update", translate("Chnroute Update"))
 s:tab("auto_restart", translate("Auto Restart"))
 s:tab("version_update", translate("Version Update"))
-s:tab("developer", translate("Developer Settings"))
-s:tab("debug", translate("Debug Logs"))
+--s:tab("developer", translate("Developer Settings"))
+--s:tab("debug", translate("Debug Logs"))
 
 o = s:taboption("op_mode", ListValue, "en_mode", font_red..bold_on..translate("Select Mode")..bold_off..font_off)
 o.description = translate("Select Mode For OpenClash Work, Try Flush DNS Cache If Network Error")
@@ -1335,7 +1335,7 @@ end
 ---- version update
 core_update = s:taboption("version_update", DummyValue, "", nil)
 core_update.template = "openclash/update"
-
+--[[
 ---- developer
 o = s:taboption("developer", Value, "firewall_custom")
 o.template = "cbi/tvalue"
@@ -1359,7 +1359,7 @@ end
 ---- debug
 o = s:taboption("debug", DummyValue, "", nil)
 o.template = "openclash/debug"
-
+]]--
 local t = {
 	{Commit, Apply}
 }
