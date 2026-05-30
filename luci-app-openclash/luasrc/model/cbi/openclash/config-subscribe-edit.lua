@@ -15,7 +15,7 @@ bold_on = [[<strong>]]
 bold_off = [[</strong>]]
 
 
-m = Map(openclash, translate("Config Subscribe Edit"))
+m = Map(openclash)
 m.pageaction = false
 m.description=translate("Convert Subscribe function of Online is Supported By subconverter Written By tindy X") ..
 "<br/>"..
