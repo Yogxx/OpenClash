@@ -62,13 +62,13 @@ s:tab("dns", "DNS "..translate("Settings"))
 s:tab("stream_enhance", translate("Streaming Enhance"))
 --s:tab("lan_ac", translate("Black&White"))
 s:tab("dashboard", translate("Dashboard Settings"))
-s:tab("ipv6", translate("IPv6 Settings"))
+--s:tab("ipv6", translate("IPv6 Settings"))
 --s:tab("rules_update", translate("Rules Update"))
 s:tab("geo_update", translate("GEO Update"))
 --s:tab("chnr_update", translate("Chnroute Update"))
 s:tab("auto_restart", translate("Auto Restart"))
 s:tab("version_update", translate("Version Update"))
---s:tab("developer", translate("Developer Settings"))
+s:tab("developer", translate("Developer Settings"))
 --s:tab("debug", translate("Debug Logs"))
 
 o = s:taboption("op_mode", ListValue, "en_mode", font_red..bold_on..translate("Select Mode")..bold_off..font_off)
@@ -1229,7 +1229,7 @@ o.rawhtml = true
 o = s:taboption("dashboard", DummyValue, "Zashboard", translate("Update Zashboard Version"))
 o.template="openclash/switch_dashboard"
 o.rawhtml = true
-
+--[[
 ---- ipv6
 o = s:taboption("ipv6", Flag, "ipv6_enable", translate("Proxy IPv6 Traffic"))
 o.description = font_red..bold_on..translate("The Gateway and DNS of The Connected Device Must be The Router IP, Disable IPv6 DHCP To Avoid Abnormal Connection If You Do Not Use")..bold_off..font_off
@@ -1331,11 +1331,11 @@ function o.write(self, section, value)
 		end
 	end
 end
-
+]]--
 ---- version update
 core_update = s:taboption("version_update", DummyValue, "", nil)
 core_update.template = "openclash/update"
---[[
+
 ---- developer
 o = s:taboption("developer", Value, "firewall_custom")
 o.template = "cbi/tvalue"
@@ -1355,7 +1355,7 @@ function o.write(self, section, value)
 		end
 	end
 end
-
+--[[
 ---- debug
 o = s:taboption("debug", DummyValue, "", nil)
 o.template = "openclash/debug"
