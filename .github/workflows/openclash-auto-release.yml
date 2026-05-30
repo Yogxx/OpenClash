@@ -2,9 +2,8 @@ name: OpenClash Auto Release
 
 on:
   push:
-    branches: [ master ]
-    paths:
-      - 'luci-app-openclash/Makefile'
+    tags:
+      - 'v*'
 
   workflow_dispatch:
     inputs:
