@@ -2,10 +2,124 @@
 .cbi-input-select {
 		width: auto !important;
 }
+
+/* ── Responsive layout for update page ── */
+@media (max-width: 768px) {
+
+  /* Fieldset 1: Compiled Version, Release Branch, Smart Core */
+  .oc-settings-table,
+  .oc-settings-table tbody,
+  .oc-settings-table tr {
+    display: block;
+    width: 100% !important;
+  }
+  .oc-settings-table td {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100% !important;
+    box-sizing: border-box;
+    padding: 4px 8px;
+    text-align: left !important;
+  }
+  .oc-settings-table td:first-child {
+    padding-top: 8px;
+  }
+  /* Label + control pairs (right-align label, left-align control) */
+  .oc-settings-table td[align="right"] {
+    font-weight: bold;
+    justify-content: flex-start;
+    padding-bottom: 2px;
+  }
+  .oc-settings-table td[align="left"] {
+    padding-top: 2px;
+    padding-bottom: 6px;
+  }
+  .oc-settings-table .cbi-input-select {
+    width: 100% !important;
+    max-width: 100%;
+  }
+
+  /* General table fix for all fieldset tables */
+  .cbi-section table {
+    width: 100% !important;
+    table-layout: fixed;
+  }
+  .cbi-section table td {
+    word-break: break-word;
+    overflow-wrap: anywhere;
+  }
+
+  /* Fieldset 2 & 3: Core Update / Client Update info rows */
+  .oc-info-table,
+  .oc-info-table tbody,
+  .oc-info-table tr {
+    display: block;
+    width: 100% !important;
+  }
+  .oc-info-table td {
+    display: inline-block;
+    width: 50% !important;
+    box-sizing: border-box;
+    padding: 4px 8px;
+    vertical-align: top;
+  }
+  /* Full-width colspan cells */
+  .oc-info-table td[colspan] {
+    width: 100% !important;
+    display: block;
+  }
+  .oc-info-table input[type="button"] {
+    width: 100%;
+    box-sizing: border-box;
+    white-space: normal;
+    height: auto;
+    padding: 6px 4px;
+    font-size: 0.85em;
+  }
+
+  /* Fieldset 4: Backup/Restore action buttons */
+  .oc-actions-table,
+  .oc-actions-table tbody,
+  .oc-actions-table tr {
+    display: block;
+    width: 100% !important;
+  }
+  .oc-actions-table td {
+    display: block;
+    width: 100% !important;
+    box-sizing: border-box;
+    padding: 6px 8px;
+    text-align: left !important;
+  }
+  .oc-actions-table td > div {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    white-space: normal !important;
+  }
+  .oc-actions-table .cbi-input-select {
+    flex: 1 1 auto;
+    min-width: 0;
+    max-width: 100%;
+    width: auto !important;
+  }
+  .oc-actions-table input[type="button"] {
+    flex-shrink: 0;
+    white-space: normal;
+    height: auto;
+    padding: 6px 8px;
+  }
+  .oc-actions-table td:not(:first-child) input[type="button"] {
+    width: 100%;
+    box-sizing: border-box;
+  }
+}
 </style>
 
 <fieldset class="cbi-section">
-	<table width="100%">
+	<table class="oc-settings-table" width="100%">
 		<tr>
 			<td width="100%" colspan="6">
 				<p align="center" id="update_tip" class="oc" style="background-color: unset;">
@@ -64,7 +178,7 @@
 	</table>
 </fieldset>
 <fieldset class="cbi-section">
-	<table width="100%">
+	<table class="oc-info-table" width="100%">
 		<tr>
 			<td width="100%" colspan="4">
 				<p align="center">
@@ -88,7 +202,7 @@
 	</table>
 </fieldset>
 <fieldset class="cbi-section">
-	<table width="100%">
+	<table class="oc-info-table" width="100%">
 		<tr>
 			<td width="100%" colspan="4">
 				<p align="center">
@@ -101,7 +215,7 @@
 	</table>
 </fieldset>
 <fieldset class="cbi-section">
-	<table width="100%">
+	<table class="oc-actions-table" width="100%">
 		<tr>
 			<td width="25%" align="center">
 				<div style="display: inline-block; white-space: nowrap;">
