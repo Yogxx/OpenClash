@@ -12,7 +12,7 @@
 
 fallback-filter:
   geoip: true
-  geoip-code: CN
+  geoip-code: ID
   ipcidr:
     - ::/128
     - ::1/128
