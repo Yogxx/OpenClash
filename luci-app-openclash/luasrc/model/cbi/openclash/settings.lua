@@ -60,16 +60,16 @@ s:tab("op_mode", translate("Operation Mode"))
 s:tab("traffic_control", translate("Traffic Control"))
 s:tab("dns", "DNS "..translate("Settings"))
 s:tab("stream_enhance", translate("Streaming Enhance"))
---s:tab("lan_ac", translate("Black&White"))
+s:tab("lan_ac", translate("Black&White"))
 s:tab("dashboard", translate("Dashboard Settings"))
---s:tab("ipv6", translate("IPv6 Settings"))
---s:tab("rules_update", translate("Rules Update"))
+s:tab("ipv6", translate("IPv6 Settings"))
+s:tab("rules_update", translate("Rules Update"))
 s:tab("geo_update", translate("GEO Update"))
---s:tab("chnr_update", translate("Chnroute Update"))
+s:tab("chnr_update", translate("Chnroute Update"))
 s:tab("auto_restart", translate("Auto Restart"))
 s:tab("version_update", translate("Version Update"))
 s:tab("developer", translate("Developer Settings"))
---s:tab("debug", translate("Debug Logs"))
+s:tab("debug", translate("Debug Logs"))
 
 o = s:taboption("op_mode", ListValue, "en_mode", font_red..bold_on..translate("Select Mode")..bold_off..font_off)
 o.description = translate("Select Mode For OpenClash Work, Try Flush DNS Cache If Network Error")
@@ -175,7 +175,7 @@ function custom_domain_dns.write(self, section, value)
 		end
 	end
 end
---[[
+
 ---- Access Control
 o = s:taboption("lan_ac", ListValue, "lan_ac_mode", translate("LAN Access Control Mode"))
 o.description = font_red..bold_on..translate("To Use in Fake-IP Mode, Please Switch The Dns Redirect Mode To Firewall Forwarding")..bold_off..font_off
@@ -416,7 +416,7 @@ for _, mac in ipairs(mac_order) do
 	mac_b:value(mac, "%s%s (%s)" %{ mac, mac_hostname_map[mac], ip_str })
 	mac_w:value(mac, "%s%s (%s)" %{ mac, mac_hostname_map[mac], ip_str })
 end
-]]--
+
 ---- Traffic Control
 o = s:taboption("traffic_control", Flag, "router_self_proxy", font_red..bold_on..translate("Router-Self Proxy")..bold_off..font_off)
 o.description = translate("Only Supported for Rule Mode")..", "..font_red..bold_on..translate("ALL Functions In Stream Enhance Tag Will Not Work After Disable")..bold_off..font_off
@@ -931,7 +931,7 @@ o.rawhtml = true
 o.template = "openclash/other_stream_option"
 o.value = "Gemini"
 o:depends("stream_auto_select_gemini", "1")
---[[
+
 ---- update Settings
 o = s:taboption("geo_update", Flag, "geo_auto_update", font_red..bold_on..translate("Auto Update GeoIP MMDB")..bold_off..font_off)
 o.default = 0
@@ -1160,7 +1160,7 @@ o.write = function()
 	SYS.call("/usr/share/openclash/openclash_chnroute.sh >/dev/null 2>&1 &")
 	HTTP.redirect(DISP.build_url("admin", "services", "openclash"))
 end
-]]--
+
 o = s:taboption("auto_restart", Flag, "auto_restart", translate("Auto Restart"))
 o.description = translate("Auto Restart OpenClash")
 o.default = 0
@@ -1229,7 +1229,7 @@ o.rawhtml = true
 o = s:taboption("dashboard", DummyValue, "Zashboard", translate("Update Zashboard Version"))
 o.template="openclash/switch_dashboard"
 o.rawhtml = true
---[[
+
 ---- ipv6
 o = s:taboption("ipv6", Flag, "ipv6_enable", translate("Proxy IPv6 Traffic"))
 o.description = font_red..bold_on..translate("The Gateway and DNS of The Connected Device Must be The Router IP, Disable IPv6 DHCP To Avoid Abnormal Connection If You Do Not Use")..bold_off..font_off
@@ -1331,7 +1331,7 @@ function o.write(self, section, value)
 		end
 	end
 end
-]]--
+
 ---- version update
 core_update = s:taboption("version_update", DummyValue, "", nil)
 core_update.template = "openclash/update"
