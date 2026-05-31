@@ -12,15 +12,9 @@ if not file_path then
 	return
 end
 
-m = Map(openclash, translate("Servers & Groups manage"))
+m = Map(openclash)
 m.pageaction = false
 m.redirect = DISP.build_url("admin/services/openclash/servers") .. "?file=" .. HTTP.urlencode(file_path)
-m.description=translate("Attention:")..
-"<br/>"..translate("1. Before modifying the configuration file, please click the button below to read the configuration file")..
-"<br/>"..translate("2. Proxy-providers address can be directly filled in the subscription link")..
-"<br/>"..
-"<br/>"..translate("Introduction to proxy usage:").." <a href='javascript:void(0)' onclick='javascript:return winOpen(\"https://wiki.metacubex.one/config/proxies/\")'>"..translate("https://wiki.metacubex.one/config/proxies/").."</a>"..
-"<br/>"..translate("Introduction to proxy-provider usage:").." <a href='javascript:void(0)' onclick='javascript:return winOpen(\"https://wiki.metacubex.one/config/proxy-providers/\")'>"..translate("https://wiki.metacubex.one/config/proxy-providers/").."</a>"
 
 -- [[ Groups Manage ]]--
 gs = m:section(TypedSection, "groups", translate("Proxy Groups"))
