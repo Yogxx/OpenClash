@@ -1,0 +1,55 @@
+name: Delete All Artifacts
+
+permissions:
+  actions: write
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm:
+        description: 'Ketik "yes" untuk konfirmasi hapus semua artifact'
+        required: true
+        default: 'no'
+
+jobs:
+  delete:
+    runs-on: ubuntu-22.04
+    if: github.event.inputs.confirm == 'yes'
+
+    steps:
+    - name: Delete All Artifacts
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const owner = context.repo.owner;
+          const repo  = context.repo.repo;
+
+          let deleted = 0;
+          let page    = 1;
+
+          while (true) {
+            const { data } = await github.rest.actions.listArtifactsForRepo({
+              owner,
+              repo,
+              per_page: 100,
+              page,
+            });
+
+            if (data.artifacts.length === 0) break;
+
+            for (const artifact of data.artifacts) {
+              await github.rest.actions.deleteArtifact({
+                owner,
+                repo,
+                artifact_id: artifact.id,
+              });
+              console.log(`Deleted: ${artifact.name} (id: ${artifact.id})`);
+              deleted++;
+            }
+
+            // Kalau hasil kurang dari 100, berarti sudah halaman terakhir
+            if (data.artifacts.length < 100) break;
+            page++;
+          }
+
+          console.log(`Total deleted: ${deleted} artifact(s)`);
