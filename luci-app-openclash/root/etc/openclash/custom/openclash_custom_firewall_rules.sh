@@ -7,4 +7,11 @@
 
 LOG_TIP "Start Add Custom Firewall Rules..."
 
-exit 0
+# Bypass tailscale0 dari OpenClash interception (fw4/nftables)
+nft insert rule inet fw4 openclash iifname "tailscale0" counter return
+nft insert rule inet fw4 openclash_mangle iifname "tailscale0" counter return
+nft insert rule inet fw4 openclash oifname "tailscale0" counter return
+
+# Bypass Tailscale CGNAT range 100.64.0.0/10
+nft insert rule inet fw4 openclash ip daddr 100.64.0.0/10 counter return
+nft insert rule inet fw4 openclash_mangle ip daddr 100.64.0.0/10 counter return
