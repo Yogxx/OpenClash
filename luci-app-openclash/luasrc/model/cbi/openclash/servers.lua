@@ -12,7 +12,7 @@ if not file_path then
 	return
 end
 
-m = Map(openclash, translate("Servers & Groups manage"))
+m = Map(openclash)
 m.pageaction = false
 m.redirect = DISP.build_url("admin/services/openclash/servers") .. "?file=" .. HTTP.urlencode(file_path)
 m.description=translate("Attention:")..
