@@ -1,3 +1,50 @@
+<style>
+@media (max-width: 768px) {
+	/* Semua table di section update jadi responsive */
+	.oc-update-wrap table,
+	.oc-update-wrap thead,
+	.oc-update-wrap tbody,
+	.oc-update-wrap tfoot,
+	.oc-update-wrap tr {
+		display: block !important;
+		width: 100% !important;
+	}
+	/* Setiap td jadi row penuh */
+	.oc-update-wrap td {
+		display: flex !important;
+		width: 100% !important;
+		box-sizing: border-box;
+		padding: 3px 4px !important;
+		align-items: center;
+		justify-content: center;
+		gap: 6px;
+		flex-wrap: wrap;
+		text-align: center;
+	}
+	/* select & button full width + center */
+	.oc-update-wrap td select,
+	.oc-update-wrap td input[type="button"] {
+		width: 100% !important;
+		max-width: 100% !important;
+		box-sizing: border-box;
+		display: block !important;
+		margin: 0 auto !important;
+		text-align: center;
+	}
+	/* Backup row: select di atas, tombol di bawah */
+	.oc-update-wrap td > div[style*="inline-block"] {
+		display: flex !important;
+		flex-direction: column !important;
+		width: 100% !important;
+		gap: 4px;
+	}
+	.oc-update-wrap td > div[style*="inline-block"] select,
+	.oc-update-wrap td > div[style*="inline-block"] span input {
+		width: 100% !important;
+	}
+}
+</style>
+<div class="oc-update-wrap">
 <fieldset class="cbi-section">
 	<table width="100%">
 		<tr>
@@ -124,6 +171,7 @@
 		</tr>
 	</table>
 </fieldset>
+</div>
 
 <script type="text/javascript">//<![CDATA[
 	var core_version = document.getElementById('CORE_VERSION');
