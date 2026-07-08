@@ -2289,7 +2289,7 @@
  * ========================================================================== */
 @font-face {
     font-family: 'Twemoji Mozilla';
-    src: url('/luci-static/resources/openclash/fonts/TwemojiMozilla-flags-B12sb_Bp.woff2') format('woff2');
+    src: url('/luci-static/resources/openclash/fonts/TwemojiMozilla-flags.woff2') format('woff2');
 }
 .oc[data-darkmode="true"] #config-mode-tabs .mode-tab {
     color: var(--text-secondary);

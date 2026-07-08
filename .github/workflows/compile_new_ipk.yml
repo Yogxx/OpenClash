@@ -129,6 +129,14 @@ jobs:
           rm -rf "$ZASHBOARD_PATH"/*
           cp -rf tmp/zashboard_zip/dist/* "$ZASHBOARD_PATH"
 
+          # 提取国旗字体
+          FONTS_PATH=tmp/${{ matrix.target.sdk_dir }}/package/luci-app-openclash/root/www/luci-static/resources/openclash/fonts
+          mkdir -p "$FONTS_PATH"
+          TWEMOJI_FONT=$(ls tmp/zashboard_zip/dist/assets/TwemojiMozilla-flags-*.woff2 2>/dev/null | head -1)
+          if [ -n "$TWEMOJI_FONT" ]; then
+            cp "$TWEMOJI_FONT" "$FONTS_PATH/TwemojiMozilla-flags.woff2"
+          fi
+
           # 更新 GeoSite.dat
           RULES_RELEASE=$(curl -s https://api.github.com/repos/Loyalsoldier/v2ray-rules-dat/releases/latest | jq -r '.tag_name')
           curl -sSL "https://github.com/Loyalsoldier/v2ray-rules-dat/releases/download/${RULES_RELEASE}/geosite.dat" -o tmp/GeoSite.dat
