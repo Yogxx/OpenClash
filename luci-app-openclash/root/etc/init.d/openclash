@@ -565,7 +565,7 @@ do_run_file()
 
    ln -s "$meta_core_path" /etc/openclash/clash
 
-   if [ -n "$OIX_TOKEN" ]; then
+   if [ -n "$OIX_TOKEN" ] || [ "$core_type" == "Oix" ]; then
       core_type="Oix"
    elif [ "$smart_enable" -eq 1 ] || [ "$core_type" == "Smart" ]; then
       core_type="Smart"
