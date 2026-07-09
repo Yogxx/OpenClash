@@ -65,10 +65,8 @@ jobs:
         run: |
           mkdir -p sdk && cd sdk
           if [ "$MATRIX_TYPE" = "ipk" ]; then
-            # URL stabil untuk IPK (release resmi 22.03)
             curl -Lf https://downloads.openwrt.org/releases/22.03.0/targets/x86/64/openwrt-sdk-22.03.0-x86-64_gcc-11.2.0_musl.Linux-x86_64.tar.xz | tar xJ
           else
-            # Resolve URL snapshot dari sha256sums — lebih reliable dari parsing HTML
             BASE_URL="https://downloads.openwrt.org/snapshots/targets/x86/64"
             SDK_FILE=$(curl -s "$BASE_URL/sha256sums" \
               | grep -oP 'openwrt-sdk[^\s]+\.tar\.zst' | head -1)
@@ -130,6 +128,22 @@ jobs:
           curl -sSL https://github.com/alecthw/mmdb_china_ip_list/releases/latest/download/Country-lite.mmdb \
             -o "$BASE/etc/openclash/Country.mmdb"
 
+      - name: Setup Node.js (Dibutuhkan untuk UI OpenClash)
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Build CodeMirror 6 Bundle & Minify CSS
+        run: |
+          cd sdk/openwrt/package/luci-app-openclash/tools/codemirror
+          npm install
+          npx esbuild entry.js --bundle --format=iife --global-name=CM6 --minify --target=es2019 --outfile=../../root/www/luci-static/resources/openclash/js/cm6.min.js --legal-comments=none --loader:.css=text
+          
+          CSS_PATH="../../root/www/luci-static/resources/openclash/css/oc.css"
+          npx lightningcss --minify --targets 'iOS >= 12, safari >= 12, android >= 4.4' "$CSS_PATH" -o "$CSS_PATH.tmp"
+          mv "$CSS_PATH.tmp" "$CSS_PATH"
+          rm -rf node_modules
+
       - name: Compile po2lmo
         run: |
           cd sdk/openwrt/package/luci-app-openclash/tools/po2lmo
@@ -171,7 +185,6 @@ jobs:
             github.event_name == 'push' ||
             (github.event_name == 'workflow_dispatch' && github.event.inputs.upload_release == 'true')
           )
-        # FIX: Ganti inputs.upload_release → github.event.inputs.upload_release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: v${{ needs.get_version.outputs.version }}
