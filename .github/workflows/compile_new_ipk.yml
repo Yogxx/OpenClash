@@ -152,13 +152,24 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Build CodeMirror 6 Bundle & Minify CSS
+      - name: Build CodeMirror 6 Bundle & Minify CSS/JS
         run: |
           cd tmp/${{ matrix.target.sdk_dir }}/package/luci-app-openclash/tools/codemirror
           # Install dependencies
           npm install
-          # Build JS
+          # Build CodeMirror 6 JS
           npx esbuild entry.js --bundle --format=iife --global-name=CM6 --minify --target=es2019 --outfile=../../root/www/luci-static/resources/openclash/js/cm6.min.js --legal-comments=none --loader:.css=text
+          # Minify other JS files (exclude cm6.min.js which is already built)
+          JS_DIR="../../root/www/luci-static/resources/openclash/js"
+          for js in "$JS_DIR"/*.js; do
+            [ -f "$js" ] || continue
+            [ "$(basename "$js")" = "cm6.min.js" ] && continue
+            SIZE_BEFORE_JS=$(wc -c < "$js")
+            npx esbuild "$js" --minify --target=es2019 --outfile="$js.tmp"
+            mv "$js.tmp" "$js"
+            SIZE_AFTER_JS=$(wc -c < "$js")
+            echo "$(basename "$js") minified: ${SIZE_BEFORE_JS} -> ${SIZE_AFTER_JS} bytes ($(( 100 - SIZE_AFTER_JS * 100 / SIZE_BEFORE_JS ))% reduction)"
+          done
           # Minify CSS
           CSS_PATH="../../root/www/luci-static/resources/openclash/css/oc.css"
           SIZE_BEFORE=$(wc -c < "$CSS_PATH")
