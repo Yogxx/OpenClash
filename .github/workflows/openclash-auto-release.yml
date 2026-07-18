@@ -135,7 +135,7 @@ jobs:
 
       - name: Build CodeMirror 6 Bundle & Minify CSS/JS
         run: |
-          cd tmp/${{ matrix.target.sdk_dir }}/package/luci-app-openclash/tools/codemirror
+          cd sdk/openwrt/package/luci-app-openclash/tools/codemirror
           # Install dependencies
           npm install
           # Build CodeMirror 6 JS
