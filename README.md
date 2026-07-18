@@ -26,21 +26,11 @@ Manual Installation
 ---
 OpenWrt (24.05)
 ---
-* Download from releases
-* upload to root
-* open terminal
-* cd
-* ls
 * opkg update (24.05)
 * opkg install luci-app-openclash_*.ipk
 
 OpenWrt (25.10)
 ---
-* Download from releases
-* upload to root
-* open terminal
-* cd
-* ls
 * apk update (25.10)
 * apk add --allow-untrusted luci-app-openclash_*.apk
 
