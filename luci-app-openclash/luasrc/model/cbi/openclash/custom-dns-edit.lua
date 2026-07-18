@@ -13,7 +13,7 @@ font_off = [[</b>]]
 bold_on = [[<strong>]]
 bold_off = [[</strong>]]
 
-m = Map(openclash, translate("Add Custom DNS Servers"))
+m = Map(openclash)
 m.pageaction = false
 m.redirect = DISP.build_url("admin/services/openclash/config-overwrite")
 if m.uci:get(openclash, sid) ~= "dns_servers" then
