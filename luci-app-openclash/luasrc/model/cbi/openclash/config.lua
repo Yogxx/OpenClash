@@ -341,7 +341,7 @@ o.write = function()
 	HTTP.redirect(DISP.build_url("admin", "services", "openclash", "rule-providers-file-manage"))
 end
 
-m = SimpleForm("openclash",translate("Config File Edit"))
+m = SimpleForm("openclash")
 m.reset = false
 m.submit = false
 
