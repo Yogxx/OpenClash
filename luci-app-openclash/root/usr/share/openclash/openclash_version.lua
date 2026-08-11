@@ -83,7 +83,7 @@ local function cdn_list()
 end
 
 local function raw_url(path)
-	return "https://raw.githubusercontent.com/Yogxx/OpenClash/" .. path
+	return "https://raw.githubusercontent.com/vernesong/OpenClash/" .. path
 end
 
 local function build_fetch_urls(mod, path)
@@ -95,7 +95,7 @@ local function build_fetch_urls(mod, path)
 		return urls
 	end
 	if mod == "https://cdn.jsdelivr.net/" or mod == "https://fastly.jsdelivr.net/" or mod == "https://testingcf.jsdelivr.net/" then
-		return { mod .. "gh/Yogxx/OpenClash@" .. path }
+		return { mod .. "gh/vernesong/OpenClash@" .. path }
 	end
 	return { mod .. raw_url(path) }
 end
