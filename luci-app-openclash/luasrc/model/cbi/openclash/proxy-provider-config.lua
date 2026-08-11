@@ -19,7 +19,7 @@ font_off = [[</b>]]
 bold_on = [[<strong>]]
 bold_off = [[</strong>]]
 
-m = Map(openclash, translate("Edit Proxy-Provider"))
+m = Map(openclash)
 m.pageaction = false
 m.redirect = DISP.build_url("admin/services/openclash/servers") .. "?file=" .. HTTP.urlencode(file_path)
 if m.uci:get(openclash, sid) ~= "proxy-provider" then
