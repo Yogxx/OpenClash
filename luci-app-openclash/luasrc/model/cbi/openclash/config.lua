@@ -35,7 +35,7 @@ function default_config_set(f)
 	end
 end
 
-ful = SimpleForm("upload", translate("Config Manage"), nil)
+ful = SimpleForm("upload", nil)
 ful.reset = false
 ful.submit = false
 
@@ -168,7 +168,7 @@ e[t].remove=0
 end
 end
 
-form=SimpleForm("config_file_list",translate("Config File List"))
+form=SimpleForm("config_file_list")
 form.reset=false
 form.submit=false
 tb=form:section(Table,e)
@@ -316,7 +316,7 @@ btnapply.write = function(self, t)
 	end
 end
 
-p = SimpleForm("provider_file_manage",translate("Provider File Manage"))
+p = SimpleForm("provider_file_manage")
 p.reset = false
 p.submit = false
 
@@ -340,7 +340,7 @@ o.write = function()
 	HTTP.redirect(DISP.build_url("admin", "services", "openclash", "rule-providers-file-manage"))
 end
 
-m = SimpleForm("openclash",translate("Config File Edit"))
+m = SimpleForm("openclash")
 m.reset = false
 m.submit = false
 
