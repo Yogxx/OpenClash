@@ -96,7 +96,7 @@ local obfs = {
 	"tls1.2_ticket_fastauth"
 }
 
-m = Map(openclash, translate("Edit Server"))
+m = Map(openclash)
 m.pageaction = false
 m.redirect = DISP.build_url("admin/services/openclash/servers") .. "?file=" .. HTTP.urlencode(file_path)
 
