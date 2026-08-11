@@ -1,0 +1,60 @@
+name: Sync Upstream OpenClash
+
+on:
+  schedule:
+    # Tiap 6 jam
+    - cron: '0 */6 * * *'
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout fork
+        uses: actions/checkout@v4
+        with:
+          ref: core
+          fetch-depth: 0
+          # Default GITHUB_TOKEN cukup buat push ke repo sendiri
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup git identity
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Add upstream remote
+        run: |
+          git remote add upstream https://github.com/vernesong/OpenClash.git || \
+          git remote set-url upstream https://github.com/vernesong/OpenClash.git
+
+      - name: Fetch upstream core branch
+        run: git fetch upstream core
+
+      - name: Check if update available
+        id: check
+        run: |
+          LOCAL=$(git rev-parse HEAD)
+          REMOTE=$(git rev-parse upstream/core)
+          if [ "$LOCAL" = "$REMOTE" ]; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Reset to upstream (full mirror)
+        if: steps.check.outputs.changed == 'true'
+        run: |
+          git checkout -B core upstream/core
+          git push origin core --force
+
+      - name: Summary
+        if: steps.check.outputs.changed == 'true'
+        run: echo "✅ Branch core disinkronkan dengan upstream vernesong/OpenClash (branch core)"
+
+      - name: No changes
+        if: steps.check.outputs.changed == 'false'
+        run: echo "ℹ️ Sudah up to date, tidak ada perubahan dari upstream"
