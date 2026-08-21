@@ -1,6 +1,6 @@
 #!/bin/sh
 # OpenClash Auto Installer for OpenWrt/ImmortalWrt
-# Auto-detect package manager (opkg <=24.x / apk >=25.x) lalu install versi terbaru dari GitHub release resmi
+# Auto-detect package manager (opkg <=24.x / apk >=25.x) lalu install versi terbaru dari GitHub release
 
 set -e
 
@@ -25,7 +25,6 @@ if command -v apk >/dev/null 2>&1 && [ -n "$VER_MAJOR" ] && [ "$VER_MAJOR" -ge 2
 elif command -v opkg >/dev/null 2>&1; then
     PKG_MODE="ipk"
 elif command -v apk >/dev/null 2>&1; then
-    # fallback: kalau opkg gak ada tapi apk ada (misal snapshot tanpa DISTRIB_RELEASE jelas)
     PKG_MODE="apk"
 else
     echo "!!! Tidak terdeteksi opkg maupun apk. Keluar."
@@ -34,18 +33,12 @@ fi
 
 echo ">>> Terdeteksi OpenWrt release: ${DISTRIB_RELEASE:-unknown} -> mode paket: $PKG_MODE"
 
-# 2. Install dependencies sesuai mode
-echo ">>> Install dependencies ($PKG_MODE)..."
+# 2. Update package list (biar dependency resolve dari feeds)
+echo ">>> Update package list ($PKG_MODE)..."
 if [ "$PKG_MODE" = "ipk" ]; then
     opkg update
-    opkg install bash iptables dnsmasq-full curl ca-bundle ipset ip-full \
-        iptables-mod-tproxy iptables-mod-extra ruby ruby-yaml kmod-tun \
-        kmod-inet-diag unzip luci-compat luci luci-base
 else
     apk update
-    apk add bash iptables dnsmasq-full curl ca-bundle ipset ip-full \
-        iptables-mod-tproxy iptables-mod-extra ruby ruby-yaml kmod-tun \
-        kmod-inet-diag unzip luci-compat luci luci-base
 fi
 
 # 3. Ambil metadata release terbaru
@@ -69,7 +62,7 @@ FILENAME=$(basename "$DOWNLOAD_URL")
 echo ">>> Download: $FILENAME"
 curl -L --retry 3 "$DOWNLOAD_URL" -o "${TMP_DIR}/${FILENAME}"
 
-# 5. Install
+# 5. Install (dependency otomatis ke-resolve dari Depends: di package)
 echo ">>> Install OpenClash..."
 if [ "$PKG_MODE" = "ipk" ]; then
     opkg install "${TMP_DIR}/${FILENAME}"
@@ -77,7 +70,6 @@ else
     apk add --allow-untrusted "${TMP_DIR}/${FILENAME}"
 fi
 
-# 6. Bersih-bersih
 rm -rf "$TMP_DIR"
 
 echo ">>> Selesai! Akses OpenClash di menu Services > OpenClash pada LuCI."
