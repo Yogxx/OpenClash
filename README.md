@@ -63,7 +63,7 @@ ScreenShot
 
 Packages
 ---
-<details><summary>Dependecies
+<details><summary>Dependecies</summary>
 * luci
 * luci-base
 * dnsmasq-full
@@ -84,7 +84,7 @@ Packages
 * ip6tables-mod-nat(iptables-ipv6)
 * kmod-inet-diag(PROCESS-NAME)
 * kmod-nft-tproxy(Firewall4)
-</summary></details>
+</details>
 
 Credit
 ---
