@@ -35,6 +35,8 @@ OpenWrt (24.05)
 ---
 ```sh
 opkg update
+```
+```sh
 opkg install luci-app-openclash_*.ipk
 ```
 
@@ -42,6 +44,8 @@ OpenWrt (25.10)
 ---
 ```sh
 apk update
+```
+```sh
 * apk add --allow-untrusted luci-app-openclash_*.apk
 ```
 
