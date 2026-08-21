@@ -49,7 +49,7 @@ apk update
 apk add --allow-untrusted luci-app-openclash_*.apk
 ```
 
-Screenshoot
+ScreenShot
 ---
 <details><summary>Overviews</summary>
  <p>
