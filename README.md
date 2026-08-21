@@ -24,8 +24,7 @@ Download link
 
 Auto Installation (Recommended)
 ---
-Script ini otomatis deteksi versi OpenWrt lu (opkg untuk <=24.x, apk untuk >=25.x), install dependencies, lalu download & pasang versi terbaru dari [releases](https://github.com/Yogxx/OpenClash/releases).
-
+Script ini otomatis deteksi versi OpenWrt (opkg untuk <=24.x, apk untuk >=25.x)
 ```sh
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/Yogxx/OpenClash/master/install-openclash.sh)"
 ```
