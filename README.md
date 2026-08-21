@@ -46,7 +46,7 @@ OpenWrt (25.10)
 apk update
 ```
 ```sh
-* apk add --allow-untrusted luci-app-openclash_*.apk
+apk add --allow-untrusted luci-app-openclash_*.apk
 ```
 
 Screenshoot
