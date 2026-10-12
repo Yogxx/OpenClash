@@ -193,9 +193,10 @@ jobs:
         env:
           PKG: ${{ env.PKG_NAME }}
         run: |
+          set -o pipefail
           cd sdk/openwrt
           make defconfig
-          make package/$PKG/compile -j$(nproc) V=s 2>&1 | tail -20
+          make package/$PKG/compile -j$(nproc) V=s 2>&1 | tail -50
 
       - name: Check compiled output
         run: |
@@ -206,6 +207,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: openclash-${{ matrix.type }}
+          if-no-files-found: error
           path: |
             sdk/openwrt/bin/packages/**/${{ env.PKG_NAME }}*.ipk
             sdk/openwrt/bin/packages/**/${{ env.PKG_NAME }}*.apk
@@ -243,12 +245,19 @@ jobs:
           VERSION: ${{ needs.get_version.outputs.version }}
           PKG: ${{ env.PKG_NAME }}
         run: |
-          shopt -s globstar
+          shopt -s globstar nullglob
+          ls -R dist | head -30
           for file in dist/**/${PKG}_*.ipk dist/**/${PKG}-*.apk; do
-            [ -f "$file" ] || continue
             FILENAME=$(basename "$file")
-            curl -s -X POST "https://api.telegram.org/bot${TG_BOT_TOKEN}/sendDocument" \
-              -F chat_id="${TG_CHAT_ID}" \
-              -F document=@"$file" \
-              -F caption="🚀 OpenClash v${VERSION} | 📦 ${FILENAME}"
+            for i in 1 2 3; do
+              resp=$(curl -s --max-time 300 -X POST "https://api.telegram.org/bot${TG_BOT_TOKEN}/sendDocument" \
+                -F chat_id="${TG_CHAT_ID}" \
+                -F document=@"$file" \
+                -F caption="🚀 OpenClash v${VERSION} | 📦 ${FILENAME}")
+              echo "$FILENAME try $i -> $(echo "$resp" | cut -c1-200)"
+              echo "$resp" | grep -q '"ok":true' && break
+              sleep 5
+            done
+            sleep 2
           done
+          
