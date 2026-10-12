@@ -10,7 +10,7 @@ on:
       upload_release:
         description: 'Upload ke GitHub Release?'
         required: true
-        default: 'true'
+        default: 'false'
         type: choice
         options:
           - 'false'
@@ -19,7 +19,7 @@ on:
       upload_telegram:
         description: 'Upload IPK/APK ke Telegram?'
         required: true
-        default: 'false'
+        default: 'true'
         type: choice
         options:
           - 'false'
