@@ -1,0 +1,8 @@
+{
+  "admin/services/openclash/oceditor": {
+    "title": "Config Editor",
+    "order": 25,
+    "action": { "type": "template", "path": "openclash/oceditor" },
+    "depends": { "acl": [ "luci-app-openclash" ] }
+  }
+}
