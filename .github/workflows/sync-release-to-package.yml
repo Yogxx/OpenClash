@@ -1,0 +1,120 @@
+name: Sync Release to Package Branch
+
+on:
+  workflow_run:
+    workflows: ["OpenClash Auto Release"]
+    types: [completed]
+
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Tag release (kosong = pakai release terbaru)"
+        required: false
+        default: ""
+
+permissions:
+  contents: write
+
+env:
+  PKG_NAME: luci-app-openclash
+  PACKAGE_BRANCH: package
+  PACKAGE_DIR: master
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    if: >
+      (github.event_name == 'workflow_dispatch') ||
+      (github.event.workflow_run.conclusion == 'success' &&
+       github.event.workflow_run.event == 'push')
+       
+    steps:
+      - name: Checkout package branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ env.PACKAGE_BRANCH }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Resolve release tag
+        id: tag
+        env:
+          INPUT_TAG: ${{ github.event.inputs.tag }}
+          REPO: ${{ github.repository }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if [ -n "$INPUT_TAG" ]; then
+            TAG="$INPUT_TAG"
+          else
+            TAG=$(curl -s -H "Authorization: Bearer $GH_TOKEN" \
+              "https://api.github.com/repos/$REPO/releases/latest" \
+              | jq -r .tag_name)
+          fi
+
+          if [ -z "$TAG" ] || [ "$TAG" = "null" ]; then
+            echo "❌ Gagal mendapatkan tag release"
+            exit 1
+          fi
+
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+          echo "✅ Using tag: $TAG"
+
+      - name: Download release assets
+        env:
+          TAG: ${{ steps.tag.outputs.tag }}
+          REPO: ${{ github.repository }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -e
+          mkdir -p assets
+
+          echo "📦 Fetching assets for tag: $TAG"
+
+          curl -s -H "Authorization: Bearer $GH_TOKEN" \
+            "https://api.github.com/repos/$REPO/releases/tags/$TAG" \
+            | jq -r '.assets[].browser_download_url' \
+            | grep -E '\.(ipk|apk)$' \
+            | while read -r url; do
+                FILENAME=$(basename "$url")
+                echo "⬇️  Downloading $FILENAME"
+                curl -fsSL -H "Authorization: Bearer $GH_TOKEN" \
+                  "$url" -o "assets/$FILENAME"
+              done
+
+          TOTAL=$(find assets -name "*.ipk" -o -name "*.apk" | wc -l)
+          if [ "$TOTAL" -eq 0 ]; then
+            echo "❌ Tidak ada asset IPK/APK ditemukan untuk tag $TAG"
+            exit 1
+          fi
+          echo "✅ Total $TOTAL file diunduh"
+
+      - name: Update package branch
+        env:
+          TAG: ${{ steps.tag.outputs.tag }}
+        run: |
+          set -e
+          mkdir -p "${PACKAGE_DIR}"
+
+          echo "🗑️  Hapus file lama"
+          rm -f "${PACKAGE_DIR}/${PKG_NAME}"_*.ipk
+          rm -f "${PACKAGE_DIR}/${PKG_NAME}"-*.apk
+
+          echo "📋 Copy file baru ke ${PACKAGE_DIR}/"
+          find assets -name "*.ipk" -exec cp -v {} "${PACKAGE_DIR}/" \;
+          find assets -name "*.apk" -exec cp -v {} "${PACKAGE_DIR}/" \;
+
+          echo "📝 Simpan versi aktif: $TAG"
+          echo "$TAG" > "${PACKAGE_DIR}/version"
+
+          echo "=== Isi ${PACKAGE_DIR} sekarang ==="
+          ls -lh "${PACKAGE_DIR}/"
+
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          git add -A "${PACKAGE_DIR}"
+
+          echo "=== Git status ==="
+          git status
+
+          git commit --allow-empty -m "sync: OpenClash ${TAG}"
+          git push
