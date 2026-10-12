@@ -28,7 +28,7 @@ $edit_files = true;
 
 $default_timezone = 'Etc/UTC';
 
-$root_path = '/www/tinyfm/openclash';
+$root_path = '/etc/openclash';
 $root_url = '/tinyfm/rootfs';
 $http_host = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : '192.168.1.1';
 
