@@ -174,7 +174,7 @@ local function block_field(section, kind, name, label, deps, constraint)
 	return option
 end
 
-m = Map(openclash, translate("Edit Server"))
+m = Map(openclash)
 m.uci = uci
 m.pageaction = false
 m.redirect = DISP.build_url("admin/services/openclash/servers") .. "?file=" .. HTTP.urlencode(file_path)
